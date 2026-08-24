@@ -1,225 +1,483 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>s3hq4y — World Builder</title>
-  <meta name="description" content="s3hq4y (s9y) — building strategy worlds, exploring AI, coding like it's 2050." />
-  <meta name="theme-color" content="#05070f" />
+  <title>s3hq4y — 世界构建者</title>
+  <meta name="description" content="s3hq4y (s9y) — 世界构建者。策略游戏 · AI · 新技术。World Builder. Strategy games, AI, new tech." />
   <meta property="og:title" content="s3hq4y — World Builder" />
-  <meta property="og:description" content="I want to build something. Strategy worlds. AI. New tech." />
+  <meta property="og:description" content="I want to build something. 我想构建一些东西。" />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://s3hq4y.github.io/" />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <meta property="og:image" content="https://s3hq4y.github.io/portal-icon-128.png" />
+  <link rel="icon" type="image/png" href="portal-icon-64.png" />
+  <link rel="apple-touch-icon" href="portal-icon-128.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cascadia+Code:wght@400;500;600&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <canvas id="stars" aria-hidden="true"></canvas>
-  <div class="horizon" aria-hidden="true"></div>
+  <div class="wallpaper" aria-hidden="true"></div>
 
-  <header class="nav" id="nav">
-    <a class="logo" href="#top" aria-label="home">
-      <span class="logo-mark">◈</span> s3hq4y<span class="caret">_</span>
-    </a>
-    <nav class="nav-links" aria-label="primary">
-      <a href="#about" class="nav-link">About</a>
-      <a href="#building" class="nav-link">Building</a>
-      <a href="#arsenal" class="nav-link">Arsenal</a>
-      <a href="#contact" class="nav-link">Contact</a>
-    </nav>
-    <div class="status" title="system status">
-      <span class="status-dot"></span> FOCUSING
+  <div class="chrome">
+    <!-- ═══════════ TITLE BAR ═══════════ -->
+    <header class="titlebar">
+      <div class="tb-brand">
+        <img src="portal-icon-64.png" alt="" class="tb-logo" />
+        <span class="tb-title" data-en="s3hq4y — World Builder" data-zh="s3hq4y — 世界构建者">s3hq4y — 世界构建者</span>
+      </div>
+      <div class="tb-controls">
+        <button class="wc wc-min" id="wcMin" aria-label="minimize">
+          <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true"><path d="M1 5h8" stroke="currentColor" stroke-width="1"/></svg>
+        </button>
+        <button class="wc wc-max" id="wcMax" aria-label="maximize">
+          <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true"><rect x="1" y="1" width="8" height="8" rx="1" fill="none" stroke="currentColor" stroke-width="1"/></svg>
+        </button>
+        <button class="wc wc-close" id="wcClose" aria-label="close">
+          <svg viewBox="0 0 10 10" width="10" height="10" aria-hidden="true"><path d="M1 1l8 8M9 1l-8 8" stroke="currentColor" stroke-width="1.1"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <div class="shell">
+      <!-- ═══════════ SIDE NAV ═══════════ -->
+      <nav class="sidenav" aria-label="primary">
+        <div class="side-user">
+          <div class="avatar" aria-hidden="true">s9</div>
+          <div class="side-user-meta">
+            <div class="side-user-name">s9y</div>
+            <div class="side-user-sub" data-en="World Builder" data-zh="世界构建者">世界构建者</div>
+          </div>
+        </div>
+
+        <a class="nav-item active" href="#overview">
+          <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><path d="M3 7.6 9 2.6l6 5V16a1 1 0 0 1-1 1h-4v-5H8v5H4a1 1 0 0 1-1-1Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span data-en="Overview" data-zh="概览">概览</span>
+        </a>
+        <a class="nav-item" href="#portal">
+          <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><path d="M4.5 16v-6.5a4.5 4.5 0 0 1 9 0V16M2.5 16h13" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span>Portal</span>
+          <i class="nav-dot" aria-hidden="true"></i>
+        </a>
+        <a class="nav-item" href="#projects">
+          <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><rect x="2.5" y="2.5" width="5.5" height="5.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="2.5" width="5.5" height="5.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="10" width="5.5" height="5.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="10" width="5.5" height="5.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+          <span data-en="More projects" data-zh="更多项目">更多项目</span>
+        </a>
+        <a class="nav-item" href="#about">
+          <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><circle cx="9" cy="6" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 16.5a6 6 0 0 1 12 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span data-en="About" data-zh="关于">关于</span>
+        </a>
+        <a class="nav-item" href="#arsenal">
+          <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><path d="M7 2h4M7.6 2v5.2L3.7 15.6A1.5 1.5 0 0 0 5 18h8a1.5 1.5 0 0 0 1.3-2.4L10.4 7.2V2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.6 12.5h6.8" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span data-en="Arsenal" data-zh="技能库">技能库</span>
+        </a>
+        <a class="nav-item" href="#contact">
+          <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><rect x="2" y="4" width="14" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m2.8 5.5 6.2 4.6 6.2-4.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+          <span data-en="Contact" data-zh="联系">联系</span>
+        </a>
+
+        <div class="side-foot">
+          <button class="lang-pill" id="langSide" type="button">
+            <svg viewBox="0 0 18 18" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="6.8" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.2 9h13.6M9 2.2c2.1 2.4 2.1 11.2 0 13.6-2.1-2.4-2.1-11.2 0-13.6Z" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+            <span id="langSideLabel">English</span>
+          </button>
+        </div>
+      </nav>
+
+      <!-- ═══════════ CONTENT ═══════════ -->
+      <main class="content" id="content">
+
+        <!-- ─────── OVERVIEW ─────── -->
+        <section class="page" id="overview">
+          <div class="page-head">
+            <h1 class="greet" data-en="Hi, I'm s9y." data-zh="你好，我是 s9y。">你好，我是 s9y。</h1>
+            <p class="greet-sub" data-en="I want to build something." data-zh="我想构建一些东西。">我想构建一些东西。</p>
+            <p class="greet-tags">
+              <span class="tag" data-en="Strategy games" data-zh="策略游戏">策略游戏</span>
+              <span class="tag" data-en="AI" data-zh="AI">AI</span>
+              <span class="tag" data-en="New tech, always" data-zh="新技术，永远">新技术，永远</span>
+            </p>
+          </div>
+
+          <div class="card pc-card">
+            <div class="card-title" data-en="About this PC" data-zh="关于这台电脑">关于这台电脑</div>
+            <div class="pc-rows">
+              <div class="pc-row">
+                <span class="pc-label" data-en="Device name" data-zh="设备名称">设备名称</span>
+                <span class="pc-value">s3hq4y</span>
+              </div>
+              <div class="pc-row">
+                <span class="pc-label" data-en="Operating system" data-zh="操作系统">操作系统</span>
+                <span class="pc-value">Earth 10 Pro 🌍</span>
+              </div>
+              <div class="pc-row">
+                <span class="pc-label" data-en="Edition" data-zh="版本">版本</span>
+                <span class="pc-value">World Builder 2050</span>
+              </div>
+              <div class="pc-row">
+                <span class="pc-label" data-en="Processor" data-zh="处理器">处理器</span>
+                <span class="pc-value" data-en="Imagination @ 98%" data-zh="想象力 @ 98%">想象力 @ 98%</span>
+              </div>
+              <div class="pc-row">
+                <span class="pc-label" data-en="Current focus" data-zh="当前专注">当前专注</span>
+                <span class="pc-value" data-en="Strategy games · AI · New tech" data-zh="策略游戏 · AI · 新技术">策略游戏 · AI · 新技术</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-actions">
+            <a class="btn btn-primary" href="#portal">
+              <svg viewBox="0 0 18 18" width="15" height="15" aria-hidden="true"><path d="M4.5 16v-6.5a4.5 4.5 0 0 1 9 0V16M2.5 16h13" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              <span data-en="Open Portal project" data-zh="查看 Portal 项目">查看 Portal 项目</span>
+            </a>
+            <a class="btn" href="#contact">
+              <svg viewBox="0 0 18 18" width="15" height="15" aria-hidden="true"><rect x="2" y="4" width="14" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m2.8 5.5 6.2 4.6 6.2-4.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+              <span data-en="Contact me" data-zh="联系我">联系我</span>
+            </a>
+            <a class="btn" href="https://github.com/s3hq4y" target="_blank" rel="noopener">
+              <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+              <span>GitHub</span>
+            </a>
+          </div>
+        </section>
+
+        <!-- ─────── PORTAL (featured) ─────── -->
+        <section class="page" id="portal">
+          <div class="page-head">
+            <span class="page-kicker" data-en="Featured project · No.1" data-zh="主打项目 · No.1">主打项目 · No.1</span>
+            <h2>Portal</h2>
+            <p class="page-sub" data-en="A VS Code extension that turns your workspace into a public MCP endpoint." data-zh="一个 VS Code 扩展：把你的工作区变成公开的 MCP 端点。">一个 VS Code 扩展：把你的工作区变成公开的 MCP 端点。</p>
+          </div>
+
+          <div class="app-window card">
+            <div class="app-titlebar">
+              <img src="portal-icon-64.png" alt="" class="app-logo" />
+              <span class="app-title">portal — VS Code Extension</span>
+              <span class="app-wc" aria-hidden="true">
+                <i></i><i></i><i></i>
+              </span>
+            </div>
+            <div class="app-body">
+              <div class="app-brandrow">
+                <img src="portal-logo-28.png" alt="PORTAL" class="app-wordmark" />
+              </div>
+
+              <div class="app-status-row">
+                <span class="pill pill-run">
+                  <i class="dot" aria-hidden="true"></i>
+                  <span data-en="RUNNING · tunnel active" data-zh="运行中 · 隧道已连接">运行中 · 隧道已连接</span>
+                </span>
+                <span class="app-meta">MIT · TypeScript · VS Code ≥ 1.95.0</span>
+              </div>
+
+              <p class="app-desc" data-en="Portal exposes your current VS Code workspace as a public MCP endpoint — deliberately small: commands and file transfer only. Connect any MCP client (Claude, ChatGPT, Cursor, even curl) to your machine over a tunnel, and let it run shells and move files." data-zh="Portal 将当前 VS Code 工作区暴露为公开的 MCP 端点——刻意保持精简：只包含命令执行与文件传输。任何 MCP 客户端（Claude、ChatGPT、Cursor，甚至 curl）都能通过隧道连接到你的机器，执行 shell 并移动文件。">Portal 将当前 VS Code 工作区暴露为公开的 MCP 端点——刻意保持精简：只包含命令执行与文件传输。任何 MCP 客户端（Claude、ChatGPT、Cursor，甚至 curl）都能通过隧道连接到你的机器，执行 shell 并移动文件。</p>
+
+              <div class="feat-grid">
+                <div class="feat">
+                  <span class="feat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 18 18" width="17" height="17"><path d="M3 9a6 6 0 0 1 12 0M5.5 9a3.5 3.5 0 0 1 7 0M8 9a1 1 0 0 1 2 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  </span>
+                  <div class="feat-text">
+                    <b data-en="MCP over HTTP" data-zh="MCP over HTTP">MCP over HTTP</b>
+                    <small data-en="Streamable HTTP at /mcp/&lt;token&gt;" data-zh="Streamable HTTP，端点 /mcp/&lt;token&gt;">Streamable HTTP，端点 /mcp/&lt;token&gt;</small>
+                  </div>
+                </div>
+                <div class="feat">
+                  <span class="feat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 18 18" width="17" height="17"><path d="M2.5 13.5V15a1.5 1.5 0 0 0 1.5 1.5h10A1.5 1.5 0 0 0 15.5 15v-1.5M9 12.5V3M5.8 6 9 2.8 12.2 6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  <div class="feat-text">
+                    <b data-en="File HTTP API" data-zh="文件 HTTP API">文件 HTTP API</b>
+                    <small data-en="upload · download · pack / unpack · 64 MiB · SHA-256" data-zh="上传 · 下载 · 打包/解包 · 64 MiB · SHA-256">上传 · 下载 · 打包/解包 · 64 MiB · SHA-256</small>
+                  </div>
+                </div>
+                <div class="feat">
+                  <span class="feat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 18 18" width="17" height="17"><rect x="2.5" y="2.5" width="13" height="13" rx="2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M6 6.5h6M6 9.5h6M6 12.5h3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  </span>
+                  <div class="feat-text">
+                    <b data-en="Exactly five tools" data-zh="恰好五个工具">恰好五个工具</b>
+                    <small data-en="run · start · read · stop · file info — no more" data-zh="run · start · read · stop · 文件信息，没有更多">run · start · read · stop · 文件信息，没有更多</small>
+                  </div>
+                </div>
+                <div class="feat">
+                  <span class="feat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 18 18" width="17" height="17"><path d="M2 6.5C4.5 4 13.5 4 16 6.5v5C13.5 14 4.5 14 2 11.5Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/><path d="M10.5 6.3v5.4M13 6.7v4.6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+                  </span>
+                  <div class="feat-text">
+                    <b data-en="Four tunnel providers" data-zh="四种隧道方式">四种隧道方式</b>
+                    <small data-en="Cloudflare Quick / Named · ngrok · custom command" data-zh="Cloudflare 快速/命名 · ngrok · 自定义命令">Cloudflare 快速/命名 · ngrok · 自定义命令</small>
+                  </div>
+                </div>
+                <div class="feat">
+                  <span class="feat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 18 18" width="17" height="17"><rect x="2" y="3" width="14" height="12" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m4.5 6.5 3 2.5-3 2.5M9.5 12H14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  <div class="feat-text">
+                    <b data-en="Every shell" data-zh="支持所有 Shell">支持所有 Shell</b>
+                    <small data-en="PowerShell · pwsh · cmd · Git Bash, UTF-8 auto" data-zh="PowerShell · pwsh · cmd · Git Bash，自动 UTF-8">PowerShell · pwsh · cmd · Git Bash，自动 UTF-8</small>
+                  </div>
+                </div>
+                <div class="feat">
+                  <span class="feat-icon" aria-hidden="true">
+                    <svg viewBox="0 0 18 18" width="17" height="17"><rect x="2" y="2" width="14" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M7 2v14" stroke="currentColor" stroke-width="1.5"/><path d="M9.5 6.5 11 8l-1.5 1.5M9.5 10.5H11.5" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                  </span>
+                  <div class="feat-text">
+                    <b data-en="Fluent sidebar" data-zh="Fluent 风格侧边栏">Fluent 风格侧边栏</b>
+                    <small data-en="start / stop · copy URL · tunnel health" data-zh="启动/停止 · 复制 URL · 隧道健康状态">启动/停止 · 复制 URL · 隧道健康状态</small>
+                  </div>
+                </div>
+              </div>
+
+              <div class="tools-card">
+                <div class="tools-title" data-en="The five MCP tools" data-zh="五个 MCP 工具">五个 MCP 工具</div>
+                <ul class="tools">
+                  <li>
+                    <code>run_command</code>
+                    <span data-en="Foreground command — 120s default timeout, up to 600s" data-zh="前台命令 —— 默认 120 秒超时，最长 600 秒">前台命令 —— 默认 120 秒超时，最长 600 秒</span>
+                  </li>
+                  <li>
+                    <code>start_command</code>
+                    <span data-en="Launch a long-running job — up to four in parallel" data-zh="启动长时任务 —— 最多四个并行">启动长时任务 —— 最多四个并行</span>
+                  </li>
+                  <li>
+                    <code>read_command</code>
+                    <span data-en="Incremental stdout/stderr by offset, ring-buffered" data-zh="按偏移量增量读取输出，环形缓冲区">按偏移量增量读取输出，环形缓冲区</span>
+                  </li>
+                  <li>
+                    <code>stop_command</code>
+                    <span data-en="Stop a job and its whole process tree" data-zh="停止任务及其整个进程树">停止任务及其整个进程树</span>
+                  </li>
+                  <li>
+                    <code>file_transfer_info</code>
+                    <span data-en="File API base URL, size limits, curl examples" data-zh="文件 API 地址、大小限制、curl 示例">文件 API 地址、大小限制、curl 示例</span>
+                  </li>
+                </ul>
+              </div>
+
+              <div class="app-actions">
+                <a class="btn btn-primary" href="https://github.com/s3hq4y/portal" target="_blank" rel="noopener">
+                  <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                  <span data-en="View on GitHub" data-zh="在 GitHub 查看">在 GitHub 查看</span>
+                </a>
+                <a class="btn" href="https://github.com/s3hq4y/portal#readme" target="_blank" rel="noopener">
+                  <span data-en="README" data-zh="README">README</span>
+                </a>
+              </div>
+
+              <p class="app-meta-note">
+                <svg viewBox="0 0 18 18" width="14" height="14" aria-hidden="true"><path d="M9 1.5 10.5 7.5 16.5 9 10.5 10.5 9 16.5 7.5 10.5 1.5 9 7.5 7.5Z" fill="currentColor"/></svg>
+                <span data-en="This very site was just pushed live through a Portal tunnel — an agent inside your machine did the building." data-zh="这个网站刚刚就是通过 Portal 隧道推送上线的——是你机器里的 AI 代理完成的构建。">这个网站刚刚就是通过 Portal 隧道推送上线的——是你机器里的 AI 代理完成的构建。</span>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─────── MORE PROJECTS ─────── -->
+        <section class="page" id="projects">
+          <div class="page-head">
+            <h2 data-en="More projects" data-zh="更多项目">更多项目</h2>
+            <p class="page-sub" data-en="Tiles from the start menu in my head." data-zh="来自我脑子里的“开始菜单”。">来自我脑子里的“开始菜单”。</p>
+          </div>
+
+          <div class="tiles">
+            <div class="tile tile-wide tile-blue">
+              <span class="tile-status" data-en="IN PRODUCTION" data-zh="开发中">开发中</span>
+              <span class="tile-icon" aria-hidden="true">♟</span>
+              <div class="tile-text">
+                <div class="tile-name" data-en="Strategy Game" data-zh="策略游戏">策略游戏</div>
+                <div class="tile-desc" data-en="Worlds with weight — one move ripples through the next ten turns." data-zh="有分量的世界——一步影响未来十个回合。">有分量的世界——一步影响未来十个回合。</div>
+              </div>
+            </div>
+            <div class="tile tile-violet">
+              <span class="tile-icon" aria-hidden="true">🧠</span>
+              <div class="tile-text">
+                <div class="tile-name" data-en="AI Experiments" data-zh="AI 实验">AI 实验</div>
+                <div class="tile-desc" data-en="Interfaces that feel like conversations, not forms." data-zh="让界面更像对话，而不是表单。">让界面更像对话，而不是表单。</div>
+              </div>
+            </div>
+            <div class="tile tile-gold">
+              <span class="tile-icon" aria-hidden="true">❓</span>
+              <div class="tile-text">
+                <div class="tile-name" data-en="The Next Thing" data-zh="下一个">下一个</div>
+                <div class="tile-desc" data-en="Unnamed yet. Closer than it looks." data-zh="还没起名字，但比看上去更近。">还没起名字，但比看上去更近。</div>
+              </div>
+            </div>
+            <a class="tile tile-gh" href="https://github.com/s3hq4y" target="_blank" rel="noopener">
+              <span class="tile-icon" aria-hidden="true">
+                <svg viewBox="0 0 16 16" width="34" height="34"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+              </span>
+              <div class="tile-text">
+                <div class="tile-name">GitHub</div>
+                <div class="tile-desc" data-en="All work, one profile" data-zh="全部作品，一个主页">全部作品，一个主页</div>
+              </div>
+            </a>
+          </div>
+        </section>
+
+        <!-- ─────── ABOUT ─────── -->
+        <section class="page" id="about">
+          <div class="page-head">
+            <h2 data-en="About" data-zh="关于">关于</h2>
+          </div>
+          <div class="about-grid">
+            <div class="card">
+              <p class="about-p" data-en="Hi, I'm s9y — a developer with a builder's itch. My current obsession has a name: strategy games. The kind where every decision echoes through the next ten turns." data-zh="你好，我是 s9y —— 一个停不下手的开发者。目前我最痴迷的是策略游戏：那种每一个决策都会在未来十个回合里回响的游戏。">你好，我是 s9y —— 一个停不下手的开发者。目前我最痴迷的是策略游戏：那种每一个决策都会在未来十个回合里回响的游戏。</p>
+              <p class="about-p" data-en="I'm exploring AI to make experiences feel smarter, and I'm constantly diving into new tech to stay a few moves ahead." data-zh="我正在探索 AI，让体验变得更聪明；也一直在潜入新技术，保持领先几步。">我正在探索 AI，让体验变得更聪明；也一直在潜入新技术，保持领先几步。</p>
+              <blockquote class="quote">
+                <p data-en="“🚀 Coding like it's 2050, but debugging like it's 1999.”" data-zh="“🚀 像 2050 年一样写代码，像 1999 年一样调试。”">“🚀 像 2050 年一样写代码，像 1999 年一样调试。”</p>
+              </blockquote>
+            </div>
+            <div class="card">
+              <div class="card-title" data-en="System information" data-zh="系统信息">系统信息</div>
+              <div class="pc-rows">
+                <div class="pc-row">
+                  <span class="pc-label" data-en="Edition" data-zh="版本">版本</span>
+                  <span class="pc-value" data-en="World Builder Edition" data-zh="世界构建者版">世界构建者版</span>
+                </div>
+                <div class="pc-row">
+                  <span class="pc-label" data-en="Processor" data-zh="处理器">处理器</span>
+                  <span class="pc-value" data-en="Imagination @ 98%" data-zh="想象力 @ 98%">想象力 @ 98%</span>
+                </div>
+                <div class="pc-row">
+                  <span class="pc-label" data-en="Memory" data-zh="内存">内存</span>
+                  <span class="pc-value" data-en="Coffee ∞" data-zh="咖啡 ∞">咖啡 ∞</span>
+                </div>
+                <div class="pc-row">
+                  <span class="pc-label" data-en="Languages" data-zh="语言">语言</span>
+                  <span class="pc-value">中 / EN</span>
+                </div>
+                <div class="pc-row">
+                  <span class="pc-label" data-en="Origin" data-zh="所在地">所在地</span>
+                  <span class="pc-value">Earth 🌍</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─────── ARSENAL ─────── -->
+        <section class="page" id="arsenal">
+          <div class="page-head">
+            <h2 data-en="The arsenal" data-zh="技能库">技能库</h2>
+          </div>
+          <div class="card arsenal">
+            <div class="ars-row">
+              <h4 data-en="Languages" data-zh="语言">语言</h4>
+              <div class="chips">
+                <span class="chip">TypeScript</span>
+                <span class="chip">JavaScript</span>
+                <span class="chip">Python</span>
+                <span class="chip">PHP</span>
+                <span class="chip">SQL</span>
+              </div>
+            </div>
+            <div class="ars-row">
+              <h4 data-en="Frontend" data-zh="前端">前端</h4>
+              <div class="chips">
+                <span class="chip">React</span>
+                <span class="chip">Next.js</span>
+                <span class="chip">Vue.js</span>
+                <span class="chip">Nuxt.js</span>
+                <span class="chip">Angular</span>
+                <span class="chip">Redux</span>
+                <span class="chip">React Native</span>
+                <span class="chip">Tailwind CSS</span>
+                <span class="chip">Material-UI</span>
+              </div>
+            </div>
+            <div class="ars-row">
+              <h4 data-en="Testing &amp; craft" data-zh="测试与工程">测试与工程</h4>
+              <div class="chips">
+                <span class="chip">Jest</span>
+                <span class="chip">Git</span>
+                <span class="chip">APIs</span>
+              </div>
+            </div>
+            <div class="ars-row">
+              <h4 data-en="Curiosity" data-zh="好奇心">好奇心</h4>
+              <div class="chips">
+                <span class="chip chip-glow">AI</span>
+                <span class="chip chip-glow" data-en="Game design" data-zh="游戏设计">游戏设计</span>
+                <span class="chip chip-glow" data-en="New tech, always" data-zh="新技术，永远">新技术，永远</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ─────── CONTACT ─────── -->
+        <section class="page" id="contact">
+          <div class="page-head">
+            <h2 data-en="Open a channel" data-zh="打开频道">打开频道</h2>
+          </div>
+          <div class="card contact-card">
+            <p data-en="Building something interesting? Let's talk strategy games, AI, or anything in between." data-zh="正在构建有趣的东西？来聊聊策略游戏、AI，或任何主题吧。">正在构建有趣的东西？来聊聊策略游戏、AI，或任何主题吧。</p>
+            <div class="contact-actions">
+              <a class="btn btn-primary" href="mailto:s3hq4y@gmail.com">
+                <svg viewBox="0 0 18 18" width="15" height="15" aria-hidden="true"><rect x="2" y="4" width="14" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m2.8 5.5 6.2 4.6 6.2-4.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+                <span>s3hq4y@gmail.com</span>
+              </a>
+              <a class="btn" href="https://discord.gg/HnmEeeNrKF" target="_blank" rel="noopener">
+                <svg viewBox="0 0 18 18" width="15" height="15" aria-hidden="true"><path d="M14.5 6.7A12 12 0 0 0 11.6 5.7l-.2.4a11 11 0 0 1 2.6 1.3 10.9 10.9 0 0 0-9 0 11 11 0 0 1 2.6-1.3l-.2-.4A12 12 0 0 0 3.5 6.7 12.4 12.4 0 0 0 2.5 13a12 12 0 0 0 3.7 1.9l.5-.8a7.6 7.6 0 0 1-1.2-.6l.3-.2a8.5 8.5 0 0 0 7.4 0l.3.2c-.4.3-.8.4-1.2.6l.5.8a12 12 0 0 0 3.7-1.9 12.4 12.4 0 0 0-1-6.3ZM7 11.4c-.5 0-.9-.5-.9-1s.4-1 .9-1 .9.4.9 1-.4 1-.9 1Zm4 0c-.5 0-.9-.5-.9-1s.4-1 .9-1 .9.4.9 1-.4 1-.9 1Z" fill="currentColor"/></svg>
+                <span>Discord</span>
+              </a>
+              <a class="btn" href="https://github.com/s3hq4y" target="_blank" rel="noopener">
+                <svg viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                <span>GitHub</span>
+              </a>
+            </div>
+          </div>
+
+          <footer class="foot">
+            <span data-en="s3hq4y.github.io — hand-built with imagination · Fluent on Windows 10" data-zh="s3hq4y.github.io — 用想象力手工构建 · Win10 Fluent 风格">s3hq4y.github.io — 用想象力手工构建 · Win10 Fluent 风格</span>
+          </footer>
+        </section>
+      </main>
     </div>
-  </header>
 
-  <main id="top">
-    <!-- ============ HERO ============ -->
-    <section class="hero">
-      <div class="badge reveal">🌍 based on Earth</div>
-      <h1 class="hero-name reveal">
-        <span class="grad">s3hq4y</span>
-      </h1>
-      <p class="tagline reveal">
-        <span class="tagline-static">&gt; </span><span id="typewriter"></span><span class="cursor">▍</span>
-      </p>
-      <p class="hero-sub reveal">I want to build something.</p>
-      <div class="hero-cta reveal">
-        <a class="btn btn-primary" href="#building">See what's next ↓</a>
-        <a class="btn btn-ghost" href="https://github.com/s3hq4y" target="_blank" rel="noopener">GitHub ↗</a>
-      </div>
-      <div class="scroll-hint reveal" aria-hidden="true">
-        <div class="mouse"><div class="wheel"></div></div>
-        <span>scroll</span>
-      </div>
-    </section>
-
-    <!-- ============ ABOUT ============ -->
-    <section id="about" class="section">
-      <div class="section-head reveal">
-        <span class="section-index">01</span>
-        <h2>about<span class="accent">.</span></h2>
-      </div>
-      <div class="about-grid">
-        <div class="about-text reveal">
-          <p>
-            Hi, I'm <strong>s9y</strong> — a developer with a builder's itch.
-            Right now my obsession has a name: <strong>strategy games</strong>.
-            The kind where every decision echoes through the next ten turns.
-          </p>
-          <p>
-            I'm exploring <strong>AI</strong> to make experiences that feel
-            smarter, and I'm constantly diving into <strong>new tech</strong>
-            to stay a few moves ahead.
-          </p>
-          <blockquote class="quote">
-            “🚀 Coding like it's 2050, but debugging like it's 1999.”
-          </blockquote>
-        </div>
-        <aside class="hud reveal" aria-label="player status panel">
-          <div class="hud-title">// SYSTEM STATUS</div>
-          <dl class="hud-rows">
-            <div class="hud-row"><dt>CALLSIGN</dt><dd>s9y / s3hq4y</dd></div>
-            <div class="hud-row"><dt>STATUS</dt><dd class="blink">FOCUSING…</dd></div>
-            <div class="hud-row"><dt>MISSION</dt><dd>build strategy worlds</dd></div>
-            <div class="hud-row"><dt>RESEARCH</dt><dd>AI × smarter UX</dd></div>
-            <div class="hud-row"><dt>TRAIT</dt><dd>always in new tech</dd></div>
-            <div class="hud-row"><dt>ORIGIN</dt><dd>Earth 🌍</dd></div>
-          </dl>
-          <div class="hud-bar" aria-hidden="true">
-            <div class="hud-bar-label"><span>IMAGINATION</span><span>98%</span></div>
-            <div class="hud-bar-track"><div class="hud-bar-fill" data-width="98"></div></div>
-          </div>
-          <div class="hud-bar" aria-hidden="true">
-            <div class="hud-bar-label"><span>COFFEE</span><span>∞</span></div>
-            <div class="hud-bar-track"><div class="hud-bar-fill full" data-width="100"></div></div>
-          </div>
-        </aside>
-      </div>
-    </section>
-
-    <!-- ============ BUILDING ============ -->
-    <section id="building" class="section">
-      <div class="section-head reveal">
-        <span class="section-index">02</span>
-        <h2>now building<span class="accent">.</span></h2>
-      </div>
-      <div class="cards">
-        <article class="card tilt reveal">
-          <div class="card-icon" aria-hidden="true">♟</div>
-          <h3>Strategy Game</h3>
-          <p class="card-desc">
-            A strategy game in development — worlds with weight, where one
-            move ripples through everything after it.
-          </p>
-          <div class="card-meta">
-            <span class="tag tag-live">IN PRODUCTION</span>
-            <span class="tag">🔒 details soon</span>
-          </div>
-        </article>
-        <article class="card tilt reveal">
-          <div class="card-icon" aria-hidden="true">🧠</div>
-          <h3>AI Experiments</h3>
-          <p class="card-desc">
-            Prototyping how AI can make interfaces feel less like forms and
-            more like conversations. Smarter UX, one experiment at a time.
-          </p>
-          <div class="card-meta">
-            <span class="tag tag-live">EXPLORING</span>
-            <span class="tag">research</span>
-          </div>
-        </article>
-        <article class="card tilt reveal card-mystery">
-          <div class="card-icon" aria-hidden="true">❓</div>
-          <h3>The Next Thing</h3>
-          <p class="card-desc">
-            Every builder has a drawer full of “one day” ideas. This one
-            doesn't have a name yet — but it's closer than it looks.
-          </p>
-          <div class="card-meta">
-            <span class="tag">CLASSIFIED</span>
-            <span class="tag">stay tuned</span>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- ============ ARSENAL ============ -->
-    <section id="arsenal" class="section">
-      <div class="section-head reveal">
-        <span class="section-index">03</span>
-        <h2>the arsenal<span class="accent">.</span></h2>
-      </div>
-      <div class="arsenal reveal">
-        <div class="arsenal-group">
-          <h4>Languages</h4>
-          <ul class="chips">
-            <li class="chip">TypeScript</li>
-            <li class="chip">JavaScript</li>
-            <li class="chip">Python</li>
-            <li class="chip">PHP</li>
-            <li class="chip">SQL</li>
-          </ul>
-        </div>
-        <div class="arsenal-group">
-          <h4>Frontend</h4>
-          <ul class="chips">
-            <li class="chip">React</li>
-            <li class="chip">Next.js</li>
-            <li class="chip">Vue.js</li>
-            <li class="chip">Nuxt.js</li>
-            <li class="chip">Angular</li>
-            <li class="chip">Redux</li>
-            <li class="chip">React Native</li>
-            <li class="chip">Tailwind CSS</li>
-            <li class="chip">Material-UI</li>
-          </ul>
-        </div>
-        <div class="arsenal-group">
-          <h4>Testing &amp; Craft</h4>
-          <ul class="chips">
-            <li class="chip">Jest</li>
-            <li class="chip">Git</li>
-            <li class="chip">APIs</li>
-          </ul>
-        </div>
-        <div class="arsenal-group">
-          <h4>Curiosity</h4>
-          <ul class="chips">
-            <li class="chip chip-glow">AI</li>
-            <li class="chip chip-glow">Game Design</li>
-            <li class="chip chip-glow">new tech, always</li>
-          </ul>
+    <!-- ═══════════ TASKBAR ═══════════ -->
+    <footer class="taskbar">
+      <button class="start" id="startBtn" type="button" aria-label="start">
+        <svg viewBox="0 0 16 16" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M1.5 1.5h6v6h-6ZM8.5 1.5h6v6h-6ZM1.5 8.5h6v6h-6ZM8.5 8.5h6v6h-6Z"/></svg>
+      </button>
+      <nav class="tb-apps" aria-label="sections">
+        <a class="tb-app" href="#overview" title="Overview">
+          <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><path d="M3 7.6 9 2.6l6 5V16a1 1 0 0 1-1 1h-4v-5H8v5H4a1 1 0 0 1-1-1Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="tb-app" href="#portal" title="Portal">
+          <img src="portal-icon-64.png" alt="Portal" width="19" height="19" />
+        </a>
+        <a class="tb-app" href="#projects" title="Projects">
+          <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><rect x="2.5" y="2.5" width="5.5" height="5.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="2.5" width="5.5" height="5.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="2.5" y="10" width="5.5" height="5.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/><rect x="10" y="10" width="5.5" height="5.5" rx="1" fill="none" stroke="currentColor" stroke-width="1.5"/></svg>
+        </a>
+        <a class="tb-app" href="#about" title="About">
+          <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><circle cx="9" cy="6" r="3.2" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M3 16.5a6 6 0 0 1 12 0" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+        </a>
+        <a class="tb-app" href="#arsenal" title="Arsenal">
+          <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><path d="M7 2h4M7.6 2v5.2L3.7 15.6A1.5 1.5 0 0 0 5 18h8a1.5 1.5 0 0 0 1.3-2.4L10.4 7.2V2" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a class="tb-app" href="#contact" title="Contact">
+          <svg viewBox="0 0 18 18" width="17" height="17" aria-hidden="true"><rect x="2" y="4" width="14" height="11" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="m2.8 5.5 6.2 4.6 6.2-4.6" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>
+        </a>
+      </nav>
+      <div class="tb-tray">
+        <button class="tb-btn" id="langBtn" type="button" title="Language / 语言">
+          <svg viewBox="0 0 18 18" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="6.8" fill="none" stroke="currentColor" stroke-width="1.4"/><path d="M2.2 9h13.6M9 2.2c2.1 2.4 2.1 11.2 0 13.6-2.1-2.4-2.1-11.2 0-13.6Z" fill="none" stroke="currentColor" stroke-width="1.4"/></svg>
+          <span class="tb-lang" id="langTray">EN</span>
+        </button>
+        <button class="tb-btn" id="themeBtn" type="button" title="Theme / 主题">
+          <span id="themeIcon"></span>
+        </button>
+        <div class="tb-clock" aria-hidden="true">
+          <div id="clockTime">--:--</div>
+          <div id="clockDate">----</div>
         </div>
       </div>
-    </section>
+    </footer>
+  </div>
 
-    <!-- ============ CONTACT ============ -->
-    <section id="contact" class="section">
-      <div class="section-head reveal">
-        <span class="section-index">04</span>
-        <h2>open a channel<span class="accent">.</span></h2>
-      </div>
-      <p class="contact-lead reveal">
-        Building something interesting? Want to talk strategy games, AI, or
-        anything in between? My inbox is a friendly place.
-      </p>
-      <div class="contact-actions reveal">
-        <a class="btn btn-primary" href="mailto:s3hq4y@gmail.com">✉ s3hq4y@gmail.com</a>
-        <a class="btn btn-ghost" href="https://discord.gg/HnmEeeNrKF" target="_blank" rel="noopener">💬 Discord server</a>
-        <a class="btn btn-ghost" href="https://github.com/s3hq4y" target="_blank" rel="noopener">⌥ GitHub</a>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">
-    <p>
-      <span class="footer-mono">s3hq4y.github.io</span> — hand-built with imagination ·
-      我在构建一些东西。
-    </p>
-  </footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
   <script src="script.js"></script>
 </body>

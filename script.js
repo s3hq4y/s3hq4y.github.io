@@ -1,251 +1,159 @@
 /* ============================================================
    s3hq4y — World Builder
-   Starfield · typewriter · reveals · tilt · nav
+   Win10 Fluent: i18n (zh/en) · theme (light/dark) · clock · nav
    ============================================================ */
 
 (() => {
   "use strict";
 
-  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const $ = (s) => document.querySelector(s);
+  const $$ = (s) => Array.from(document.querySelectorAll(s));
 
-  /* ---------- starfield with parallax + shooting stars ---------- */
-  const canvas = document.getElementById("stars");
-  const ctx = canvas.getContext("2d");
-  let stars = [];
-  let shooters = [];
-  let w = 0, h = 0, dpr = 1;
-  const mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+  const ICONS = {
+    sun: '<svg viewBox="0 0 18 18" width="15" height="15" aria-hidden="true"><circle cx="9" cy="9" r="3.4" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M9 1.6v1.8M9 14.6v1.8M1.6 9h1.8M14.6 9h1.8M3.7 3.7l1.3 1.3M13 13l1.3 1.3M14.3 3.7 13 5M5 13l-1.3 1.3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>',
+    moon: '<svg viewBox="0 0 18 18" width="15" height="15" aria-hidden="true"><path d="M14.8 10.8A6.2 6.2 0 0 1 7.2 3.2a6.2 6.2 0 1 0 7.6 7.6Z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"/></svg>',
+  };
 
-  function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 2);
-    w = canvas.width = Math.floor(innerWidth * dpr);
-    h = canvas.height = Math.floor(innerHeight * dpr);
-    canvas.style.width = innerWidth + "px";
-    canvas.style.height = innerHeight + "px";
-    seed();
-  }
+  const TOASTS = {
+    close: {
+      zh: "这个窗口关不掉的——它是你的世界 ✦",
+      en: "This window can't be closed — it's your world ✦",
+    },
+    max: {
+      zh: "已经是最大尺寸了。",
+      en: "It's already at maximum size.",
+    },
+    start: {
+      zh: "开始菜单 · 敬请期待",
+      en: "Start menu · coming soon",
+    },
+  };
 
-  function seed() {
-    const count = Math.min(220, Math.floor((innerWidth * innerHeight) / 6500));
-    stars = Array.from({ length: count }, () => ({
-      x: Math.random() * w,
-      y: Math.random() * h,
-      z: 0.3 + Math.random() * 0.7,      // depth → parallax + brightness
-      r: (0.4 + Math.random() * 1.3) * dpr,
-      tw: Math.random() * Math.PI * 2,   // twinkle phase
-      tws: 0.4 + Math.random() * 1.6,    // twinkle speed
-    }));
-  }
+  const state = {
+    lang: localStorage.getItem("fl-lang") || "zh",
+    theme:
+      localStorage.getItem("fl-theme") ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light"),
+  };
 
-  function spawnShooter() {
-    if (reduceMotion || shooters.length > 2) return;
-    const startX = Math.random() * w * 0.8;
-    const startY = Math.random() * h * 0.35;
-    const angle = Math.PI * (0.65 + Math.random() * 0.2); // down-right-ish
-    const speed = (7 + Math.random() * 6) * dpr;
-    shooters.push({
-      x: startX, y: startY,
-      vx: Math.cos(angle) * speed,
-      vy: Math.sin(angle) * speed * 0.6,
-      life: 1,
+  /* ---------- i18n ---------- */
+
+  function applyLang(lang) {
+    state.lang = lang;
+    document.documentElement.lang = lang === "zh" ? "zh-CN" : "en";
+    document.title =
+      lang === "zh" ? "s3hq4y — 世界构建者" : "s3hq4y — World Builder";
+
+    $$("[data-en]").forEach((el) => {
+      const text = el.getAttribute(lang === "zh" ? "data-zh" : "data-en");
+      if (text != null) el.textContent = text;
     });
+
+    // toggles show the OTHER language (what you'll switch to)
+    $("#langSideLabel").textContent = lang === "zh" ? "English" : "中文";
+    $("#langTray").textContent = lang === "zh" ? "EN" : "中";
+
+    localStorage.setItem("fl-lang", lang);
+    tickClock();
   }
 
-  let last = performance.now();
-  let nextShooter = last + 2500 + Math.random() * 4000;
+  /* ---------- theme ---------- */
 
-  function tick(now) {
-    const dt = Math.min((now - last) / 16.7, 3);
-    last = now;
-
-    mouse.x += (mouse.tx - mouse.x) * 0.05 * dt;
-    mouse.y += (mouse.ty - mouse.y) * 0.05 * dt;
-
-    ctx.clearRect(0, 0, w, h);
-
-    // deep-space tint
-    const bg = ctx.createRadialGradient(w * 0.5, h * 0.12, 0, w * 0.5, h * 0.12, Math.max(w, h) * 0.9);
-    bg.addColorStop(0, "rgba(20, 26, 58, 0.55)");
-    bg.addColorStop(0.5, "rgba(8, 11, 26, 0.3)");
-    bg.addColorStop(1, "rgba(5, 7, 15, 0)");
-    ctx.fillStyle = bg;
-    ctx.fillRect(0, 0, w, h);
-
-    // stars
-    const px = mouse.x * 26 * dpr;
-    const py = mouse.y * 26 * dpr;
-    for (const s of stars) {
-      s.tw += s.tws * 0.02 * dt;
-      const a = 0.35 + 0.55 * s.z * (0.7 + 0.3 * Math.sin(s.tw));
-      ctx.globalAlpha = a;
-      ctx.fillStyle = s.z > 0.75 ? "#dbe4ff" : "#9fb0e8";
-      const x = s.x + px * s.z;
-      const y = s.y + py * s.z;
-      ctx.beginPath();
-      ctx.arc(x, y, s.r * (0.8 + 0.2 * Math.sin(s.tw)), 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-
-    // shooting stars
-    if (now > nextShooter) {
-      spawnShooter();
-      nextShooter = now + 3000 + Math.random() * 6000;
-    }
-    shooters = shooters.filter((sh) => sh.life > 0);
-    for (const sh of shooters) {
-      sh.x += sh.vx * dt;
-      sh.y += sh.vy * dt;
-      sh.life -= 0.012 * dt;
-      const tail = 90 * dpr;
-      const g = ctx.createLinearGradient(sh.x, sh.y, sh.x - sh.vx * (tail / sh.vx) * 4, sh.y - sh.vy * 4);
-      g.addColorStop(0, `rgba(219, 228, 255, ${0.9 * sh.life})`);
-      g.addColorStop(1, "rgba(34, 211, 238, 0)");
-      ctx.strokeStyle = g;
-      ctx.lineWidth = 1.6 * dpr;
-      ctx.beginPath();
-      ctx.moveTo(sh.x, sh.y);
-      ctx.lineTo(sh.x - sh.vx * 4, sh.y - sh.vy * 4);
-      ctx.stroke();
-    }
-
-    requestAnimationFrame(tick);
+  function applyTheme(theme) {
+    state.theme = theme;
+    document.documentElement.setAttribute("data-theme", theme);
+    $("#themeIcon").innerHTML = theme === "dark" ? ICONS.moon : ICONS.sun;
+    localStorage.setItem("fl-theme", theme);
   }
 
-  window.addEventListener("resize", resize);
-  window.addEventListener("mousemove", (e) => {
-    mouse.tx = (e.clientX / innerWidth - 0.5) * 2;
-    mouse.ty = (e.clientY / innerHeight - 0.5) * 2;
-  }, { passive: true });
+  /* ---------- clock ---------- */
 
-  resize();
-  if (!reduceMotion) requestAnimationFrame(tick);
-  else {
-    // draw one static frame
-    ctx.fillStyle = "rgba(5,7,15,0)";
-    for (const s of stars) {
-      ctx.globalAlpha = 0.5;
-      ctx.fillStyle = "#9fb0e8";
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
+  function tickClock() {
+    const now = new Date();
+    const isZh = state.lang === "zh";
+    const time = now.toLocaleTimeString(
+      isZh ? "zh-CN" : "en-US",
+      isZh
+        ? { hour: "2-digit", minute: "2-digit", hour12: false }
+        : { hour: "numeric", minute: "2-digit", hour12: true }
+    );
+    const date = now.toLocaleDateString(
+      isZh ? "zh-CN" : "en-US",
+      isZh
+        ? { year: "numeric", month: "numeric", day: "numeric" }
+        : { weekday: "short", month: "numeric", day: "numeric", year: "numeric" }
+    );
+    $("#clockTime").textContent = time;
+    $("#clockDate").textContent = date;
   }
 
-  /* ---------- typewriter ---------- */
-  const phrases = [
-    "building strategy worlds…",
-    "exploring AI magic…",
-    "coding like it's 2050.",
-    "debugging like it's 1999.",
-    "always in new tech.",
-  ];
-  const tw = document.getElementById("typewriter");
-  if (tw) {
-    let pi = 0, ci = 0, deleting = false;
-    (function type() {
-      const phrase = phrases[pi];
-      if (!deleting) {
-        ci++;
-        tw.textContent = phrase.slice(0, ci);
-        if (ci === phrase.length) {
-          deleting = true;
-          setTimeout(type, 1900);
-          return;
-        }
-        setTimeout(type, 55 + Math.random() * 70);
-      } else {
-        ci--;
-        tw.textContent = phrase.slice(0, ci);
-        if (ci === 0) {
-          deleting = false;
-          pi = (pi + 1) % phrases.length;
-          setTimeout(type, 350);
-          return;
-        }
-        setTimeout(type, 28);
-      }
-    })();
-  }
+  /* ---------- active section ---------- */
 
-  /* ---------- reveal on scroll ---------- */
-  const reveals = document.querySelectorAll(".reveal");
-  if ("IntersectionObserver" in window && !reduceMotion) {
-    const io = new IntersectionObserver((entries) => {
-      for (const en of entries) {
-        if (en.isIntersecting) {
-          en.target.classList.add("visible");
-          io.unobserve(en.target);
-        }
-      }
-    }, { threshold: 0.15 });
-    reveals.forEach((el, i) => {
-      el.style.transitionDelay = `${Math.min(i % 5, 4) * 90}ms`;
-      io.observe(el);
-    });
-  } else {
-    reveals.forEach((el) => el.classList.add("visible"));
-  }
+  function wireNav() {
+    const content = $("#content");
+    const pages = $$(".page");
+    const marks = () => $$(".nav-item, .tb-app");
 
-  /* ---------- HUD bars fill when visible ---------- */
-  const bars = document.querySelectorAll(".hud-bar-fill");
-  if ("IntersectionObserver" in window) {
-    const bio = new IntersectionObserver((entries) => {
-      for (const en of entries) {
-        if (en.isIntersecting) {
-          en.target.style.width = en.target.dataset.width + "%";
-          bio.unobserve(en.target);
-        }
-      }
-    }, { threshold: 0.4 });
-    bars.forEach((b) => bio.observe(b));
-  } else {
-    bars.forEach((b) => (b.style.width = b.dataset.width + "%"));
-  }
+    if (!("IntersectionObserver" in window)) return;
 
-  /* ---------- nav: scrolled state + active section ---------- */
-  const nav = document.getElementById("nav");
-  const sections = [...document.querySelectorAll("main section[id]")];
-  const navLinks = [...document.querySelectorAll(".nav-link")];
-
-  window.addEventListener("scroll", () => {
-    nav.classList.toggle("scrolled", window.scrollY > 30);
-  }, { passive: true });
-
-  if ("IntersectionObserver" in window) {
-    const sio = new IntersectionObserver((entries) => {
-      for (const en of entries) {
-        if (en.isIntersecting) {
-          navLinks.forEach((l) =>
-            l.classList.toggle("active", l.getAttribute("href") === "#" + en.target.id));
-        }
-      }
-    }, { rootMargin: "-45% 0px -50% 0px" });
-    sections.forEach((s) => sio.observe(s));
-  }
-
-  /* ---------- card tilt + glow follow ---------- */
-  if (!reduceMotion) {
-    document.querySelectorAll(".tilt").forEach((card) => {
-      let raf = null;
-      card.addEventListener("mousemove", (e) => {
-        const r = card.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width;
-        const y = (e.clientY - r.top) / r.height;
-        card.style.setProperty("--mx", (x * 100).toFixed(1) + "%");
-        card.style.setProperty("--my", (y * 100).toFixed(1) + "%");
-        if (raf) return;
-        raf = requestAnimationFrame(() => {
-          raf = null;
-          const rx = (0.5 - y) * 6;
-          const ry = (x - 0.5) * 8;
-          card.style.transform = `perspective(900px) rotateX(${rx.toFixed(2)}deg) rotateY(${ry.toFixed(2)}deg) translateY(-3px)`;
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((en) => {
+          if (!en.isIntersecting) return;
+          const href = "#" + en.target.id;
+          marks().forEach((m) =>
+            m.classList.toggle("active", m.getAttribute("href") === href)
+          );
         });
-      });
-      card.addEventListener("mouseleave", () => {
-        card.style.transform = "";
-      });
-    });
+      },
+      { root: content, rootMargin: "-25% 0px -65% 0px" }
+    );
+
+    pages.forEach((p) => io.observe(p));
   }
+
+  /* ---------- toast ---------- */
+
+  let toastTimer = null;
+
+  function toast(kind) {
+    const el = $("#toast");
+    el.innerHTML =
+      '<span class="t-mark">✦</span><span>' +
+      TOASTS[kind][state.lang] +
+      "</span>";
+    el.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => el.classList.remove("show"), 3200);
+  }
+
+  /* ---------- wire up ---------- */
+
+  function wire() {
+    const toggleLang = () => applyLang(state.lang === "zh" ? "en" : "zh");
+    const toggleTheme = () =>
+      applyTheme(state.theme === "dark" ? "light" : "dark");
+
+    $("#langSide").addEventListener("click", toggleLang);
+    $("#langBtn").addEventListener("click", toggleLang);
+    $("#themeBtn").addEventListener("click", toggleTheme);
+
+    $("#wcClose").addEventListener("click", () => toast("close"));
+    $("#wcMax").addEventListener("click", () => toast("max"));
+    $("#wcMin").addEventListener("click", () =>
+      $("#content").scrollTo({ top: 0, behavior: "smooth" })
+    );
+    $("#startBtn").addEventListener("click", () => toast("start"));
+
+    setInterval(tickClock, 1000);
+    wireNav();
+  }
+
+  /* ---------- init ---------- */
+
+  document.addEventListener("DOMContentLoaded", () => {
+    applyTheme(state.theme);
+    applyLang(state.lang);
+    wire();
+  });
 })();
