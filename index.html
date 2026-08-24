@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>s3hq4y — World Builder</title>
+  <meta name="description" content="s3hq4y (s9y) — building strategy worlds, exploring AI, coding like it's 2050." />
+  <meta name="theme-color" content="#05070f" />
+  <meta property="og:title" content="s3hq4y — World Builder" />
+  <meta property="og:description" content="I want to build something. Strategy worlds. AI. New tech." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://s3hq4y.github.io/" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <canvas id="stars" aria-hidden="true"></canvas>
+  <div class="horizon" aria-hidden="true"></div>
+
+  <header class="nav" id="nav">
+    <a class="logo" href="#top" aria-label="home">
+      <span class="logo-mark">◈</span> s3hq4y<span class="caret">_</span>
+    </a>
+    <nav class="nav-links" aria-label="primary">
+      <a href="#about" class="nav-link">About</a>
+      <a href="#building" class="nav-link">Building</a>
+      <a href="#arsenal" class="nav-link">Arsenal</a>
+      <a href="#contact" class="nav-link">Contact</a>
+    </nav>
+    <div class="status" title="system status">
+      <span class="status-dot"></span> FOCUSING
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- ============ HERO ============ -->
+    <section class="hero">
+      <div class="badge reveal">🌍 based on Earth</div>
+      <h1 class="hero-name reveal">
+        <span class="grad">s3hq4y</span>
+      </h1>
+      <p class="tagline reveal">
+        <span class="tagline-static">&gt; </span><span id="typewriter"></span><span class="cursor">▍</span>
+      </p>
+      <p class="hero-sub reveal">I want to build something.</p>
+      <div class="hero-cta reveal">
+        <a class="btn btn-primary" href="#building">See what's next ↓</a>
+        <a class="btn btn-ghost" href="https://github.com/s3hq4y" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+      <div class="scroll-hint reveal" aria-hidden="true">
+        <div class="mouse"><div class="wheel"></div></div>
+        <span>scroll</span>
+      </div>
+    </section>
+
+    <!-- ============ ABOUT ============ -->
+    <section id="about" class="section">
+      <div class="section-head reveal">
+        <span class="section-index">01</span>
+        <h2>about<span class="accent">.</span></h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text reveal">
+          <p>
+            Hi, I'm <strong>s9y</strong> — a developer with a builder's itch.
+            Right now my obsession has a name: <strong>strategy games</strong>.
+            The kind where every decision echoes through the next ten turns.
+          </p>
+          <p>
+            I'm exploring <strong>AI</strong> to make experiences that feel
+            smarter, and I'm constantly diving into <strong>new tech</strong>
+            to stay a few moves ahead.
+          </p>
+          <blockquote class="quote">
+            “🚀 Coding like it's 2050, but debugging like it's 1999.”
+          </blockquote>
+        </div>
+        <aside class="hud reveal" aria-label="player status panel">
+          <div class="hud-title">// SYSTEM STATUS</div>
+          <dl class="hud-rows">
+            <div class="hud-row"><dt>CALLSIGN</dt><dd>s9y / s3hq4y</dd></div>
+            <div class="hud-row"><dt>STATUS</dt><dd class="blink">FOCUSING…</dd></div>
+            <div class="hud-row"><dt>MISSION</dt><dd>build strategy worlds</dd></div>
+            <div class="hud-row"><dt>RESEARCH</dt><dd>AI × smarter UX</dd></div>
+            <div class="hud-row"><dt>TRAIT</dt><dd>always in new tech</dd></div>
+            <div class="hud-row"><dt>ORIGIN</dt><dd>Earth 🌍</dd></div>
+          </dl>
+          <div class="hud-bar" aria-hidden="true">
+            <div class="hud-bar-label"><span>IMAGINATION</span><span>98%</span></div>
+            <div class="hud-bar-track"><div class="hud-bar-fill" data-width="98"></div></div>
+          </div>
+          <div class="hud-bar" aria-hidden="true">
+            <div class="hud-bar-label"><span>COFFEE</span><span>∞</span></div>
+            <div class="hud-bar-track"><div class="hud-bar-fill full" data-width="100"></div></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- ============ BUILDING ============ -->
+    <section id="building" class="section">
+      <div class="section-head reveal">
+        <span class="section-index">02</span>
+        <h2>now building<span class="accent">.</span></h2>
+      </div>
+      <div class="cards">
+        <article class="card tilt reveal">
+          <div class="card-icon" aria-hidden="true">♟</div>
+          <h3>Strategy Game</h3>
+          <p class="card-desc">
+            A strategy game in development — worlds with weight, where one
+            move ripples through everything after it.
+          </p>
+          <div class="card-meta">
+            <span class="tag tag-live">IN PRODUCTION</span>
+            <span class="tag">🔒 details soon</span>
+          </div>
+        </article>
+        <article class="card tilt reveal">
+          <div class="card-icon" aria-hidden="true">🧠</div>
+          <h3>AI Experiments</h3>
+          <p class="card-desc">
+            Prototyping how AI can make interfaces feel less like forms and
+            more like conversations. Smarter UX, one experiment at a time.
+          </p>
+          <div class="card-meta">
+            <span class="tag tag-live">EXPLORING</span>
+            <span class="tag">research</span>
+          </div>
+        </article>
+        <article class="card tilt reveal card-mystery">
+          <div class="card-icon" aria-hidden="true">❓</div>
+          <h3>The Next Thing</h3>
+          <p class="card-desc">
+            Every builder has a drawer full of “one day” ideas. This one
+            doesn't have a name yet — but it's closer than it looks.
+          </p>
+          <div class="card-meta">
+            <span class="tag">CLASSIFIED</span>
+            <span class="tag">stay tuned</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- ============ ARSENAL ============ -->
+    <section id="arsenal" class="section">
+      <div class="section-head reveal">
+        <span class="section-index">03</span>
+        <h2>the arsenal<span class="accent">.</span></h2>
+      </div>
+      <div class="arsenal reveal">
+        <div class="arsenal-group">
+          <h4>Languages</h4>
+          <ul class="chips">
+            <li class="chip">TypeScript</li>
+            <li class="chip">JavaScript</li>
+            <li class="chip">Python</li>
+            <li class="chip">PHP</li>
+            <li class="chip">SQL</li>
+          </ul>
+        </div>
+        <div class="arsenal-group">
+          <h4>Frontend</h4>
+          <ul class="chips">
+            <li class="chip">React</li>
+            <li class="chip">Next.js</li>
+            <li class="chip">Vue.js</li>
+            <li class="chip">Nuxt.js</li>
+            <li class="chip">Angular</li>
+            <li class="chip">Redux</li>
+            <li class="chip">React Native</li>
+            <li class="chip">Tailwind CSS</li>
+            <li class="chip">Material-UI</li>
+          </ul>
+        </div>
+        <div class="arsenal-group">
+          <h4>Testing &amp; Craft</h4>
+          <ul class="chips">
+            <li class="chip">Jest</li>
+            <li class="chip">Git</li>
+            <li class="chip">APIs</li>
+          </ul>
+        </div>
+        <div class="arsenal-group">
+          <h4>Curiosity</h4>
+          <ul class="chips">
+            <li class="chip chip-glow">AI</li>
+            <li class="chip chip-glow">Game Design</li>
+            <li class="chip chip-glow">new tech, always</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CONTACT ============ -->
+    <section id="contact" class="section">
+      <div class="section-head reveal">
+        <span class="section-index">04</span>
+        <h2>open a channel<span class="accent">.</span></h2>
+      </div>
+      <p class="contact-lead reveal">
+        Building something interesting? Want to talk strategy games, AI, or
+        anything in between? My inbox is a friendly place.
+      </p>
+      <div class="contact-actions reveal">
+        <a class="btn btn-primary" href="mailto:s3hq4y@gmail.com">✉ s3hq4y@gmail.com</a>
+        <a class="btn btn-ghost" href="https://discord.gg/HnmEeeNrKF" target="_blank" rel="noopener">💬 Discord server</a>
+        <a class="btn btn-ghost" href="https://github.com/s3hq4y" target="_blank" rel="noopener">⌥ GitHub</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>
+      <span class="footer-mono">s3hq4y.github.io</span> — hand-built with imagination ·
+      我在构建一些东西。
+    </p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
