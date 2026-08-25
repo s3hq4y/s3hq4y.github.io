@@ -3,7 +3,7 @@
    ============================================================ */
 
 import { el, clear } from "./dom";
-import { icon, type IconName } from "./icons";
+import { icon } from "./icons";
 import { tt } from "./i18n";
 import * as fs from "./fs";
 import { wm } from "./wm";
@@ -11,15 +11,31 @@ import { showMenu } from "./menu";
 import { dlgPrompt } from "./dialog";
 import type { FSNode } from "./fs";
 
-interface Shortcut { zh: string; en: string; ic: IconName; open: () => void }
+interface Shortcut { zh: string; en: string; asset: string; open: () => void }
 
 const SHORTCUTS: Shortcut[] = [
-  { zh: "此电脑", en: "This PC", ic: "pc", open: () => wm.open("files", "/") },
-  { zh: "回收站", en: "Recycle Bin", ic: "recycle", open: () => wm.open("files", fs.RECYCLE) },
-  { zh: "终端", en: "Terminal", ic: "terminal", open: () => wm.open("terminal") },
-  { zh: "画图", en: "Paint", ic: "paint", open: () => wm.open("paint") },
-  { zh: "关于 s9y", en: "About s9y", ic: "about", open: () => wm.open("about") },
+  { zh: "此电脑", en: "This PC", asset: "desktop.svg", open: () => wm.open("files", "/") },
+  { zh: "回收站", en: "Recycle Bin", asset: "recycle-bin.svg", open: () => wm.open("files", fs.RECYCLE) },
+  { zh: "终端", en: "Terminal", asset: "terminal.svg", open: () => wm.open("terminal") },
+  { zh: "画图", en: "Paint", asset: "paint.svg", open: () => wm.open("paint") },
+  { zh: "关于 s9y", en: "About s9y", asset: "about.svg", open: () => wm.open("about") },
 ];
+
+const assetIcon = (name: string): HTMLElement => el("img", {
+  cls: "dt-icon-img",
+  attrs: {
+    src: `assets/icons/${name}`,
+    alt: "",
+    width: "48",
+    height: "48",
+    draggable: "false",
+  },
+});
+
+const inlineIcon = (svg: string): HTMLElement => el("span", {
+  cls: "dt-icon-ic",
+  html: svg,
+});
 
 let container: HTMLElement | null = null;
 
@@ -30,11 +46,11 @@ function openNode(path: string): void {
   else wm.open("notepad", path);
 }
 
-function iconEl(ic: string, label: string, onOpen: () => void, menuPath?: string): HTMLElement {
+function iconEl(graphic: HTMLElement, label: string, onOpen: () => void, menuPath?: string): HTMLElement {
   const elid = el("button", {
     cls: "dt-icon",
     children: [
-      el("span", { cls: "dt-icon-ic", html: ic }),
+      graphic,
       el("span", { cls: "dt-icon-label", text: label }),
     ],
   });
@@ -71,13 +87,17 @@ export function renderDesktop(): void {
   if (!container) return;
   clear(container);
   for (const s of SHORTCUTS) {
-    container.append(iconEl(icon(s.ic, 44), tt(s.zh, s.en), s.open));
+    container.append(iconEl(assetIcon(s.asset), tt(s.zh, s.en), s.open));
   }
   for (const n of fs.list("/Desktop") as FSNode[]) {
     const p = fs.join("/Desktop", n.name);
-    const ic = n.type === "dir" ? icon("folder", 44) : icon(n.kind === "img" ? "fileImg" : "fileTxt", 44);
+    const graphic = n.type === "dir"
+      ? inlineIcon(icon("folder", 44))
+      : n.kind === "img"
+        ? inlineIcon(icon("fileImg", 44))
+        : assetIcon("document-text.svg");
     container.append(
-      iconEl(ic, n.name, () => {
+      iconEl(graphic, n.name, () => {
         if (n.type === "dir") wm.open("files", p);
         else openNode(p);
       }, p),

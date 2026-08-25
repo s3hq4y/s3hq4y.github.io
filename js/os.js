@@ -1185,12 +1185,26 @@ Built with \u2665 by s9y \u2014 https://github.com/s3hq4y
 
   // src/os/desktop.ts
   var SHORTCUTS = [
-    { zh: "\u6B64\u7535\u8111", en: "This PC", ic: "pc", open: () => wm.open("files", "/") },
-    { zh: "\u56DE\u6536\u7AD9", en: "Recycle Bin", ic: "recycle", open: () => wm.open("files", RECYCLE) },
-    { zh: "\u7EC8\u7AEF", en: "Terminal", ic: "terminal", open: () => wm.open("terminal") },
-    { zh: "\u753B\u56FE", en: "Paint", ic: "paint", open: () => wm.open("paint") },
-    { zh: "\u5173\u4E8E s9y", en: "About s9y", ic: "about", open: () => wm.open("about") }
+    { zh: "\u6B64\u7535\u8111", en: "This PC", asset: "desktop.svg", open: () => wm.open("files", "/") },
+    { zh: "\u56DE\u6536\u7AD9", en: "Recycle Bin", asset: "recycle-bin.svg", open: () => wm.open("files", RECYCLE) },
+    { zh: "\u7EC8\u7AEF", en: "Terminal", asset: "terminal.svg", open: () => wm.open("terminal") },
+    { zh: "\u753B\u56FE", en: "Paint", asset: "paint.svg", open: () => wm.open("paint") },
+    { zh: "\u5173\u4E8E s9y", en: "About s9y", asset: "about.svg", open: () => wm.open("about") }
   ];
+  var assetIcon = (name) => el("img", {
+    cls: "dt-icon-img",
+    attrs: {
+      src: `assets/icons/${name}`,
+      alt: "",
+      width: "48",
+      height: "48",
+      draggable: "false"
+    }
+  });
+  var inlineIcon = (svg) => el("span", {
+    cls: "dt-icon-ic",
+    html: svg
+  });
   var container = null;
   function openNode(path) {
     const n = node(path);
@@ -1198,11 +1212,11 @@ Built with \u2665 by s9y \u2014 https://github.com/s3hq4y
     if (n.kind === "img") wm.open("photos", path);
     else wm.open("notepad", path);
   }
-  function iconEl(ic, label, onOpen, menuPath) {
+  function iconEl(graphic, label, onOpen, menuPath) {
     const elid = el("button", {
       cls: "dt-icon",
       children: [
-        el("span", { cls: "dt-icon-ic", html: ic }),
+        graphic,
         el("span", { cls: "dt-icon-label", text: label })
       ]
     });
@@ -1238,13 +1252,13 @@ Built with \u2665 by s9y \u2014 https://github.com/s3hq4y
     if (!container) return;
     clear(container);
     for (const s of SHORTCUTS) {
-      container.append(iconEl(icon(s.ic, 44), tt(s.zh, s.en), s.open));
+      container.append(iconEl(assetIcon(s.asset), tt(s.zh, s.en), s.open));
     }
     for (const n of list("/Desktop")) {
       const p = join("/Desktop", n.name);
-      const ic = n.type === "dir" ? icon("folder", 44) : icon(n.kind === "img" ? "fileImg" : "fileTxt", 44);
+      const graphic = n.type === "dir" ? inlineIcon(icon("folder", 44)) : n.kind === "img" ? inlineIcon(icon("fileImg", 44)) : assetIcon("document-text.svg");
       container.append(
-        iconEl(ic, n.name, () => {
+        iconEl(graphic, n.name, () => {
           if (n.type === "dir") wm.open("files", p);
           else openNode(p);
         }, p)
