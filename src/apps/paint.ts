@@ -14,9 +14,9 @@ const SWATCHES = ["#000000", "#ffffff", "#E81123", "#F7630C", "#FFB900", "#107C1
 function render(win: AppWindow): void {
   win.setTitle(tt("画图", "Paint"));
 
-  const color = str(win, "color", "#0078D4");
-  const size = num(win, "size", 4);
-  const tool = str(win, "tool", "brush");
+  let color = str(win, "color", "#0078D4");
+  let size = num(win, "size", 4);
+  let tool = str(win, "tool", "brush");
 
   const canvas = el("canvas", { cls: "pt-canvas", attrs: { width: "1100", height: "700" } }) as HTMLCanvasElement;
   const ctx = canvas.getContext("2d")!;
@@ -66,7 +66,10 @@ function render(win: AppWindow): void {
     cls: "pt-size",
     attrs: { type: "range", min: "1", max: "40", value: String(size) },
   }) as HTMLInputElement;
-  sizeRange.addEventListener("input", () => win.store.set("size", Number(sizeRange.value)));
+  sizeRange.addEventListener("input", () => {
+    size = Number(sizeRange.value);
+    win.store.set("size", size);
+  });
 
   const swatches = el("div", { cls: "pt-swatches" });
   const markSel = (sel: string): void => {
@@ -76,10 +79,10 @@ function render(win: AppWindow): void {
   for (const c of SWATCHES) {
     const b = el("button", { cls: "pt-sw", dataset: { c }, style: { background: c }, attrs: { title: c } });
     b.addEventListener("click", () => {
-      win.store.set("color", c);
-      win.store.set("tool", "brush");
+      color = c;
+      win.store.set("color", color);
       toolBtns("brush");
-      markSel(c);
+      markSel(color);
     });
     swatches.append(b);
   }
@@ -88,8 +91,8 @@ function render(win: AppWindow): void {
     attrs: { type: "color", value: color.startsWith("#") ? color : "#0078D4" },
   }) as HTMLInputElement;
   picker.addEventListener("input", () => {
-    win.store.set("color", picker.value);
-    win.store.set("tool", "brush");
+    color = picker.value;
+    win.store.set("color", color);
     toolBtns("brush");
     markSel("");
   });
@@ -98,9 +101,10 @@ function render(win: AppWindow): void {
   const btnBrush = el("button", { cls: "pt-tool sel", html: "", title: tt("画笔", "Brush"), children: [el("span", { cls: "pt-tool-ic brush" })] });
   const btnEraser = el("button", { cls: "pt-tool", title: tt("橡皮", "Eraser"), children: [el("span", { cls: "pt-tool-ic eraser" })] });
   const toolBtns = (t: string): void => {
-    btnBrush.classList.toggle("sel", t === "brush");
-    btnEraser.classList.toggle("sel", t === "eraser");
-    win.store.set("tool", t);
+    tool = t;
+    btnBrush.classList.toggle("sel", tool === "brush");
+    btnEraser.classList.toggle("sel", tool === "eraser");
+    win.store.set("tool", tool);
   };
   btnBrush.addEventListener("click", () => toolBtns("brush"));
   btnEraser.addEventListener("click", () => toolBtns("eraser"));
