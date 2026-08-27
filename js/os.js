@@ -368,11 +368,11 @@ Built with \u2665 by s9y \u2014 https://github.com/s3hq4y
     }
   ];
   var ACCENTS = [
+    { id: "red", light: "#D70A53", dark: "#FF5C8A" },
     { id: "blue", light: "#0078D4", dark: "#4CC2FF" },
     { id: "teal", light: "#038387", dark: "#30E6D6" },
     { id: "purple", light: "#8764B8", dark: "#B4A0FF" },
     { id: "magenta", light: "#C239B3", dark: "#FF9AE8" },
-    { id: "red", light: "#E81123", dark: "#FF6B7A" },
     { id: "orange", light: "#CA5010", dark: "#FF9D5C" },
     { id: "green", light: "#107C10", dark: "#6CCB5F" },
     { id: "steel", light: "#4A5A6E", dark: "#9AB0C6" }
@@ -383,7 +383,7 @@ Built with \u2665 by s9y \u2014 https://github.com/s3hq4y
     const theme = saved === "light" || saved === "dark" ? saved : window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
     return {
       theme,
-      accent: "blue",
+      accent: "red",
       wallpaper: "debian",
       lang: (localStorage.getItem("wos.lang") ?? localStorage.getItem("fl-lang")) === "en" ? "en" : "zh",
       hour12: false,
@@ -3367,7 +3367,7 @@ Built with \u2665 by s9y \u2014 https://github.com/s3hq4y
   }
   function playBoot(onReady) {
     bootEl = el("div", { id: "boot", cls: "boot" }, [
-      el("div", { cls: "boot-logo", html: icon("logo", 64) }),
+      el("div", { cls: "boot-logo", html: icon("debian", 64) }),
       el("div", { cls: "boot-name", text: "s9y OS" }),
       el("div", { cls: "boot-spinner" }, [el("div", { cls: "boot-dot d1" }), el("div", { cls: "boot-dot d2" }), el("div", { cls: "boot-dot d3" }), el("div", { cls: "boot-dot d4" }), el("div", { cls: "boot-dot d5" })]),
       el("div", { cls: "boot-hint", text: tt("TypeScript \xB7 \u65E0\u4F9D\u8D56", "TypeScript \xB7 zero-dependency") })

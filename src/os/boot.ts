@@ -24,7 +24,7 @@ function tickLock(): void {
 
 export function playBoot(onReady: () => void): void {
   bootEl = el("div", { id: "boot", cls: "boot" }, [
-    el("div", { cls: "boot-logo", html: icon("logo", 64) }),
+    el("div", { cls: "boot-logo", html: icon("debian", 64) }),
     el("div", { cls: "boot-name", text: "s9y OS" }),
     el("div", { cls: "boot-spinner" }, [el("div", { cls: "boot-dot d1" }), el("div", { cls: "boot-dot d2" }), el("div", { cls: "boot-dot d3" }), el("div", { cls: "boot-dot d4" }), el("div", { cls: "boot-dot d5" })]),
     el("div", { cls: "boot-hint", text: tt("TypeScript · 无依赖", "TypeScript · zero-dependency") }),

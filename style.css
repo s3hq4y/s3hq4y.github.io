@@ -1,10 +1,12 @@
 /* ============================================================
    s9y OS — Windows 10 Fluent design system
-   Mica · acrylic · #0078D4 · 4px radii · Windows motion easing
+   Mica · acrylic · #D70A53 · 4px radii · Windows motion easing
    ============================================================ */
 
 :root {
-  --accent: #0078D4;
+  /* Global accent (辅色) — Debian red. JS syncs this with the accent
+     picked in Settings; every accent-derived color reads from it. */
+  --accent: #D70A53;
   --accent-hover: color-mix(in srgb, var(--accent) 86%, #000);
   --accent-press: color-mix(in srgb, var(--accent) 72%, #000);
   --accent-soft: color-mix(in srgb, var(--accent) 14%, transparent);
@@ -43,7 +45,7 @@
 }
 
 html[data-theme="dark"] {
-  --accent-contrast: #001b2d;
+  --accent-contrast: #2a000f;
   --accent-readable: var(--accent);
 
   --bg: #1f1f1f;
@@ -666,7 +668,7 @@ html[data-theme="light"] .dt-icon-label { color: #fff; }
   padding: 10px 12px; cursor: text; user-select: text;
 }
 .tm-line { white-space: pre-wrap; word-break: break-all; min-height: 1em; }
-.t-accent { color: #4cc2ff; }
+.t-accent { color: var(--accent); }
 .t-path { color: #7ee787; }
 .t-dim { color: rgba(232,232,240,0.55); }
 .t-err { color: #ff7b72; }
@@ -675,7 +677,7 @@ html[data-theme="light"] .dt-icon-label { color: #fff; }
 .tm-prompt { white-space: pre; }
 .tm-in {
   flex: 1; background: none; border: none; outline: none;
-  color: #e8e8f0; font-family: var(--mono); font-size: 13px; caret-color: #4cc2ff;
+  color: #e8e8f0; font-family: var(--mono); font-size: 13px; caret-color: var(--accent);
 }
 
 /* ============ app: calculator ============ */
