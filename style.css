@@ -98,7 +98,7 @@ svg { display: inline-block; vertical-align: -0.15em; flex: none; }
 
 .wallpaper {
   position: fixed; inset: 0;
-  background: center / cover no-repeat url("wallpaper.jpg");
+  background: url("wallpaper-debian.svg") center / contain no-repeat #000;
   transition: filter 0.3s var(--ease);
   z-index: 0;
 }
@@ -172,7 +172,7 @@ svg { display: inline-block; vertical-align: -0.15em; flex: none; }
 .boot-hint { color: var(--text-3); font-size: 12px; }
 
 .lock { position: fixed; inset: 0; z-index: 500; cursor: pointer; }
-.lock-bg { position: absolute; inset: 0; background: center / cover no-repeat url("wallpaper.jpg"); filter: brightness(0.72); }
+.lock-bg { position: absolute; inset: 0; background: url("wallpaper-debian.svg") center / contain no-repeat #000; filter: brightness(0.72); }
 .lock::after {
   content: ""; position: absolute; inset: 0;
   background: linear-gradient(180deg, rgba(0,0,0,0.15), rgba(0,0,0,0.45));

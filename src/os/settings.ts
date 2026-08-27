@@ -15,7 +15,7 @@ export interface Wallpaper {
 }
 
 export const WALLPAPERS: Wallpaper[] = [
-  { id: "bloom", zh: "Default bloom", en: "默认之花 Bloom", css: "center / cover no-repeat url('wallpaper.jpg')", thumb: "center / cover no-repeat url('wallpaper.jpg')" },
+  { id: "debian", zh: "Debian ASCII", en: "Debian ASCII", css: "url('wallpaper-debian.svg') center / contain no-repeat #000", thumb: "url('wallpaper-debian.svg') center / cover no-repeat #000" },
   {
     id: "aurora", zh: "Aurora", en: "极光",
     css: "linear-gradient(160deg,#0b1026 0%,#12275e 30%,#0e6b8f 55%,#37b5a0 78%,#c9f2d7 100%)",
@@ -74,7 +74,7 @@ function defaults(): Settings {
   return {
     theme,
     accent: "blue",
-    wallpaper: "bloom",
+    wallpaper: "debian",
     lang: (localStorage.getItem("wos.lang") ?? localStorage.getItem("fl-lang")) === "en" ? "en" : "zh",
     hour12: false,
     user: "s9y",

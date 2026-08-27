@@ -20,7 +20,7 @@ function resolveSrc(path: string): { src: string; name: string } {
 function render(win: AppWindow): void {
   makeDispose(win);
   const arg = win.store.get("openArg");
-  const path = str(win, "path", typeof arg === "string" ? arg : "/Pictures/wallpaper.jpg");
+  const path = str(win, "path", typeof arg === "string" ? arg : "/Pictures/wallpaper-debian.svg");
   win.store.set("path", path);
   const { src, name } = resolveSrc(path);
   win.setTitle(`${name} — ${tt("照片", "Photos")}`);

@@ -352,7 +352,7 @@ export function initTaskbar(): void {
   document.body.append(panels);
 
   /* start */
-  const startBtn = el("button", { cls: "tb-start", html: icon("logo", 21), title: "s9y OS" });
+  const startBtn = el("button", { cls: "tb-start", html: icon("debian", 21), title: "s9y OS" });
   startBtn.addEventListener("click", () => togglePanel({ id: "start", anchor: "left", build: buildStart }, startBtn));
 
   /* search */

@@ -57,7 +57,7 @@ Built with ♥ by s9y — https://github.com/s3hq4y
           txt("todo.txt", "[ ] ship Portal v1.1\n[ ] write a blog post about web OS\n[ ] water the plants\n[x] delete the old landing page\n"),
         ],
       },
-      { name: "Pictures", type: "dir", mtime: now, children: [{ name: "wallpaper.jpg", type: "file", kind: "img", content: "wallpaper.jpg", mtime: now }] },
+      { name: "Pictures", type: "dir", mtime: now, children: [{ name: "wallpaper-debian.svg", type: "file", kind: "img", content: "wallpaper-debian.svg", mtime: now }] },
       { name: "Downloads", type: "dir", mtime: now, children: [] },
       { name: "Music", type: "dir", mtime: now, children: [] },
       { name: "Recycle Bin", type: "dir", mtime: now, children: [] },
