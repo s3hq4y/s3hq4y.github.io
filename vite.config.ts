@@ -7,7 +7,6 @@ export default defineConfig({
     emptyOutDir: true,
     target: 'es2020',
     assetsInlineLimit: 4096,
-    copyPublicDir: true,
   },
   server: { open: true },
 });
