@@ -28,6 +28,8 @@ import type { Mesh } from '@babylonjs/core/Meshes/mesh';
  */
 export function createStage(canvas: HTMLCanvasElement): () => void {
   const engine = new Engine(canvas, true, { stencil: false, preserveDrawingBuffer: false }, true);
+  // Cap render resolution at 1.5x DPR: full HiDPI costs ~4x pixels for little visible gain.
+  engine.setHardwareScalingLevel(1 / Math.min(window.devicePixelRatio || 1, 1.5));
   const scene = new Scene(engine);
   scene.clearColor = new Color4(0.024, 0.024, 0.031, 1);
 
