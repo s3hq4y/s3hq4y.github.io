@@ -1,67 +1,55 @@
-# s9y OS 🖥️
+# s9y — Visual Portfolio
 
-**s3hq4y (s9y)** 的个人站点 —— 一个用 **TypeScript** 从零打造的网页操作系统，
-Windows 10 Fluent 设计语言。
+**s3hq4y (s9y)** 的个人视觉作品集。实时 3D、双语、零后端。
 
-Personal site of **s3hq4y (s9y)** — a complete **web operating system**
-written from scratch in **TypeScript**, styled after Windows 10 Fluent.
+Personal visual portfolio of **s3hq4y (s9y)**. Real-time 3D, bilingual, no backend.
 
 🌐 Live at: <https://s3hq4y.github.io>
 
-## 功能 / Features
+## 技术栈 / Stack
 
-- 🚀 **启动流程** — 开机动画 → 锁屏（点击解锁）→ 桌面 · boot → lock screen → desktop
-- 🪟 **窗口管理器** — 拖拽、八向缩放、边缘吸附分屏、最小化/最大化、焦点层级、任务栏联动
-- 🧭 **任务栏** — 开始菜单、应用搜索、快速设置（Wi-Fi/亮度/音量/主题/语言）、
-  日历、通知中心（含角标）、显示桌面
-- 📁 **虚拟文件系统** — localStorage 持久化；桌面右键新建、重命名、删除/还原（回收站）
-- 📦 **内置应用 / Apps**
-  - 文件资源管理器 File Explorer（导航/面包屑/快捷访问/回收站）
-  - 记事本 Notepad（打开/保存/另存为，字数统计）
-  - 终端 Terminal（`help` 查看全部命令：ls/cd/cat/echo 重定向/tree/open/theme/wallpaper/neofetch…）
-  - 计算器 Calculator（支持键盘）
-  - 画图 Paint（画笔/橡皮/调色板，保存到图片库）
-  - 照片 Photos（缩放/拖拽平移/滚轮缩放）
-  - 时钟 Clock（世界时钟 + 秒表）
-  - 任务管理器 Task Manager（实时曲线、结束任务）
-  - 设置 Settings（主题/强调色/壁纸/语言/12 小时制/存储/恢复出厂）
-  - 关于 About（关于 s9y 与 Portal 项目）
-- 🌐 **双语** — 中文 / English 全局切换（含应用窗口实时重渲染）
-- 🌗 **浅色/深色主题** + 8 种强调色 + 5 张壁纸
-- 🔔 **通知系统** — Toast + 操作中心
-- ⌨️ Segoe UI + Cascadia Code，零运行时依赖
+- **Babylon.js 9** — 实时 WebGL 主视觉（发光核心 + 线框壳 + 轨道环 + 240 颗粒子）
+- **TypeScript 7** — 严格模式，全部子路径导入以启用 tree-shaking
+- **Vite 8** — 开发服务器 + 构建，输出到 `docs/`
+- **零 UI 框架** — 原生 DOM，CSS 自定义属性驱动主题
 
-## TypeScript / Building
-
-源码全部为 TypeScript（`src/`），构建产物为一个无依赖的 IIFE 包 `js/os.js`：
+## 开发 / Development
 
 ```bash
-npm install        # devDependencies: typescript + esbuild
-npm run typecheck  # tsc --noEmit（严格模式）
-npm run build      # 类型检查 + esbuild 打包 -> js/os.js
-npm run dev        # watch 模式
+bun install        # 安装依赖
+bun run dev        # 本地开发服务器
+bun run typecheck  # tsc --noEmit
+bun run build      # 类型检查 + 构建到 docs/
+bun run preview    # 预览构建产物
 ```
 
 ## 结构 / Structure
 
 | Path | Purpose |
 | --- | --- |
-| `index.html` | 壳页面（noscript 回退） |
-| `style.css` | Fluent 设计系统（tokens、明暗主题、动画） |
-| `js/os.js` | 构建产物（esbuild bundle） |
-| `src/main.ts` | 入口：装配 shell、启动流程 |
-| `src/os/` | 内核模块：`wm` 窗口管理、`fs` 虚拟文件系统、`taskbar`、`desktop`、`settings`、`i18n`、`dialog`、`menu`、`notifications`、`boot`、`icons`、`dom` |
-| `src/apps/` | 各应用模块 + `registry` |
-| `wallpaper.jpg` | 默认壁纸（Mica 来源） |
+| `index.html` | Vite 入口壳 |
+| `src/main.ts` | 页面装配、双语切换、卡片交互 |
+| `src/scene.ts` | Babylon.js 3D 场景 |
+| `src/data.ts` | 项目数据与全部文案（zh / en） |
+| `src/style.css` | 设计系统与动画 |
+| `docs/` | 构建产物（GitHub Pages 发布源） |
 
-## Local dev
+## 部署 / Deploy
+
+构建产物输出到 `docs/`。GitHub Pages 需将发布源设为 **`main` 分支的 `/docs` 目录**。
+
+Build output goes to `docs/`. Set GitHub Pages source to **`main` branch, `/docs` folder**.
 
 ```bash
-python -m http.server 8080   # or: npx serve
-# → http://localhost:8080
+bun run build
+git add -A && git commit -m "Update portfolio" && git push
 ```
+
+## 作品 / Work
+
+- **[Portal](https://github.com/s3hq4y/portal)** — 公共 MCP 端点与隧道桥接 · GPL-3.0
+- **[Wibe](https://github.com/s3hq4y/wibe)** — 浏览器驱动的编码代理（UWA）· AGPL-3.0
 
 ---
 
-*This site was built and deployed by an AI agent through the
-[Portal](https://github.com/s3hq4y/portal) MCP tunnel.* 🤖
+*旧站源码保存在 `legacy` 分支。* 🤖

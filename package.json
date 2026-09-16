@@ -1,16 +1,20 @@
 {
-  "name": "s9y-os",
+  "name": "s9y-portfolio",
   "version": "1.0.0",
   "private": true,
-  "description": "s9y OS — a Windows 10 Fluent style web operating system, written in TypeScript.",
   "type": "module",
+  "description": "s9y — visual portfolio with Babylon.js 3D.",
   "scripts": {
-    "typecheck": "tsc --noEmit",
-    "build": "node build.mjs",
-    "dev": "node build.mjs --watch"
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
-    "esbuild": "^0.24.0",
-    "typescript": "^5.6.0"
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0"
+  },
+  "dependencies": {
+    "@babylonjs/core": "^9.26.2"
   }
 }

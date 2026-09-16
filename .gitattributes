@@ -1,0 +1,5 @@
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.woff2 binary
+docs/assets/* -diff linguist-generated=true
