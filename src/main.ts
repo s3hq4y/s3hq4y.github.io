@@ -1,6 +1,6 @@
 import './style.css';
 import { createStage } from './scene';
-import { chips, links, marquee, projects, stats, strings, type Lang } from './data';
+import { chips, links, marquee, projects, strings, type Lang } from './data';
 
 const root = document.documentElement;
 const stored = localStorage.getItem('s9y.lang');
@@ -40,17 +40,6 @@ function renderWork(): void {
         <a class="card-link" href="${p.url}" target="_blank" rel="noopener noreferrer">${t('work.repo')} ↗</a>
       </footer>
     </article>
-  `).join('');
-}
-
-function renderStats(): void {
-  const host = document.getElementById('stats');
-  if (!host) return;
-  host.innerHTML = stats.map((s) => `
-    <li>
-      <span class="stat-value">${s.value}</span>
-      <span class="stat-label">${s.label[lang]}</span>
-    </li>
   `).join('');
 }
 
@@ -96,7 +85,6 @@ document.getElementById('lang')?.addEventListener('click', () => {
   localStorage.setItem('s9y.lang', lang);
   applyStatic();
   renderWork();
-  renderStats();
   bindCardSheen();
   observeReveals();
 });
@@ -123,13 +111,53 @@ window.addEventListener('pointermove', (e) => {
   glow.style.transform = `translate3d(${e.clientX - 180}px, ${e.clientY - 180}px, 0)`;
 }, { passive: true });
 
+// TRAE-style giant logo: the wordmark tilts and sways following the pointer,
+// then springs back to rest when the cursor leaves the stage.
+function bindLogo(): void {
+  const stage = document.getElementById('logoStage');
+  const inner = document.getElementById('logoStageInner');
+  if (!stage || !inner) return;
+
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (reduced) return;
+
+  let raf = 0;
+  let tx = 0, ty = 0; // target rotation (deg)
+  let cx = 0, cy = 0; // current rotation (deg)
+
+  const onMove = (e: PointerEvent) => {
+    const r = stage.getBoundingClientRect();
+    const nx = (e.clientX - r.left) / r.width - 0.5;   // -0.5 .. 0.5
+    const ny = (e.clientY - r.top) / r.height - 0.5;
+    tx = nx * 26;   // rotateY
+    ty = -ny * 18;  // rotateX
+    stage.style.setProperty('--mx', `${(nx + 0.5) * 100}%`);
+    stage.style.setProperty('--my', `${(ny + 0.5) * 100}%`);
+  };
+
+  const reset = () => { tx = 0; ty = 0; };
+
+  const tick = () => {
+    cx += (tx - cx) * 0.09;
+    cy += (ty - cy) * 0.09;
+    inner.style.transform = `rotateX(${cy.toFixed(3)}deg) rotateY(${cx.toFixed(3)}deg)`;
+    raf = requestAnimationFrame(tick);
+  };
+
+  stage.addEventListener('pointermove', onMove, { passive: true });
+  stage.addEventListener('pointerleave', reset, { passive: true });
+  raf = requestAnimationFrame(tick);
+
+  window.addEventListener('pagehide', () => cancelAnimationFrame(raf), { once: true });
+}
+
 applyStatic();
 renderWork();
-renderStats();
 renderChips();
 renderMarquee();
 renderLinks();
 bindCardSheen();
+bindLogo();
 observeReveals();
 
 createStage(document.getElementById('stage') as HTMLCanvasElement);

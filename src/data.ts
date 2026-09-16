@@ -43,13 +43,6 @@ export const projects: Project[] = [
   },
 ];
 
-export const stats = [
-  { value: '2', label: { zh: '开源项目', en: 'Open-source projects' } },
-  { value: '25', label: { zh: 'GitHub Stars', en: 'GitHub stars' } },
-  { value: '100%', label: { zh: 'TypeScript', en: 'TypeScript' } },
-  { value: '3D', label: { zh: '实时渲染', en: 'Real-time rendering' } },
-];
-
 export const chips = ['TypeScript', 'Babylon.js', 'MCP', 'WebGL', 'Vite'];
 
 export const marquee = [
