@@ -1,4 +1,4 @@
-﻿import { defineConfig } from 'vite';
+import { defineConfig } from 'vite';
 
 export default defineConfig({
   base: '/',
@@ -8,5 +8,13 @@ export default defineConfig({
     target: 'es2020',
     assetsInlineLimit: 4096,
   },
-  server: { open: true },
+  server: {
+    host: '127.0.0.1',
+    port: 3000,
+    open: true,
+  },
+  preview: {
+    host: '127.0.0.1',
+    port: 8080,
+  },
 });
