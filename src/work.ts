@@ -75,11 +75,15 @@ export function initWork(section: HTMLElement): WorkHandle {
       section.classList.remove('is-pinned');
       return;
     }
-    section.classList.add('is-pinned');
+        section.classList.add('is-pinned');
+    // Lead-in buffer: keep the section pinned (and the first panel parked)
+    // for a stretch of scroll before horizontal travel starts, so the opening
+    // project is not skipped over the instant the section pins.
+    const leadIn = vh * 0.5;
     const scrollLen = vh * (n - 1 + 0.6);
-    section.style.height = vh + scrollLen + 'px';
+    section.style.height = vh + leadIn + scrollLen + 'px';
     const rect = section.getBoundingClientRect();
-    const progress = clamp(-rect.top / scrollLen, 0, 1);
+    const progress = clamp((-rect.top - leadIn) / scrollLen, 0, 1);
     const shift = progress * (track.scrollWidth - window.innerWidth);
     track.style.transform = 'translate3d(' + -shift + 'px,0,0)';
     track.style.setProperty('--progress', String(progress));
