@@ -20,8 +20,9 @@ export interface LogoGridOptions {
   minCols?: number;
   maxCols?: number;
   cellPx?: number;
-  radius?: number;
+    radius?: number;
   push?: number;
+  gap?: number;
 }
 
 export interface LogoGridHandle {
@@ -42,8 +43,9 @@ export function mountLogoGrid(host: HTMLElement, opts: LogoGridOptions): LogoGri
   const minCols = opts.minCols ?? 14;
   const maxCols = opts.maxCols ?? 30;
   const cellPx = opts.cellPx ?? 52;
-  const radius = opts.radius ?? 200;
+    const radius = opts.radius ?? 200;
   const push = opts.push ?? 26;
+  const gap = opts.gap ?? 1;
   const target = opts.pointerTarget ?? host.parentElement ?? host;
 
   const canvas = document.createElement('canvas');
@@ -72,8 +74,8 @@ export function mountLogoGrid(host: HTMLElement, opts: LogoGridOptions): LogoGri
   const render = (): void => {
     if (!ctx) return;
     ctx.clearRect(0, 0, cssW, cssH);
-    const dw = cell + 0.5;
-    const dh = cell + 0.5;
+        const dw = cell * gap + 0.5;
+    const dh = cell * gap + 0.5;
     const sw = cell * dpr + 1;
     const sh = cell * dpr + 1;
     for (let i = 0; i < tiles.length; i++) {
@@ -154,8 +156,8 @@ export function mountLogoGrid(host: HTMLElement, opts: LogoGridOptions): LogoGri
     }
   };
 
-  const wake = (): void => {
-    if (dead || settled) return;
+    const wake = (): void => {
+    if (dead || !settled) return;
     settled = false;
     if (!reduced) raf = requestAnimationFrame(tick);
   };
@@ -177,8 +179,11 @@ export function mountLogoGrid(host: HTMLElement, opts: LogoGridOptions): LogoGri
     if (!reduced) raf = requestAnimationFrame(tick);
   };
 
-    target.addEventListener('pointermove', (e) => { onMove(e); wake(); }, { passive: true });
-  target.addEventListener('pointerleave', () => { onLeave(); wake(); }, { passive: true });
+    const onPointerMove = (e: PointerEvent): void => { onMove(e); wake(); };
+    const onPointerLeave = (): void => { onLeave(); wake(); };
+
+    target.addEventListener('pointermove', onPointerMove, { passive: true });
+    target.addEventListener('pointerleave', onPointerLeave, { passive: true });
 
   const gate = opts.ready ?? Promise.resolve();
   gate.then(start).catch(start);
@@ -197,9 +202,9 @@ export function mountLogoGrid(host: HTMLElement, opts: LogoGridOptions): LogoGri
       cancelAnimationFrame(raf);
       window.clearTimeout(fallback);
       window.clearTimeout(rt);
-      window.removeEventListener('resize', onResize);
-      target.removeEventListener('pointermove', onMove);
-      target.removeEventListener('pointerleave', onLeave);
+            window.removeEventListener('resize', onResize);
+      target.removeEventListener('pointermove', onPointerMove);
+      target.removeEventListener('pointerleave', onPointerLeave);
       canvas.remove();
     },
   };

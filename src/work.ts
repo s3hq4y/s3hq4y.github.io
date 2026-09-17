@@ -46,12 +46,13 @@ export function initWork(section: HTMLElement): WorkHandle {
         mountLogoGrid(host, {
           ready,
           pointerTarget: panel,
-          paint: imagePainter(img, { scale: 0.62 }),
+                    paint: imagePainter(img, { scale: 0.62 }),
           minCols: 12,
           maxCols: 26,
           cellPx: 56,
           radius: 220,
           push: 30,
+          gap: 0.86,
         }),
       );
     });
