@@ -1,8 +1,9 @@
 import './style.css';
 import { createStage } from './scene';
 import { mountLogoGrid, textPainter } from './logogrid';
+import { mountSkillFlow, type SkillFlowHandle } from './skillflow';
 import { initWork, type WorkHandle } from './work';
-import { chips, links, marquee, projects, strings, type Lang } from './data';
+import { chips, links, projects, skills, strings, type Lang } from './data';
 
 const root = document.documentElement;
 const stored = localStorage.getItem('s9y.lang');
@@ -53,11 +54,25 @@ function renderChips(): void {
   host.innerHTML = chips.map((c) => `<li>${c}</li>`).join('');
 }
 
-function renderMarquee(): void {
+let skillFlow: SkillFlowHandle | null = null;
+
+function mountSkills(): void {
   const host = document.getElementById('marquee');
   if (!host) return;
-  const items = marquee.map((m) => `<span class="tag">${m}</span>`).join('<span class="tag-dot">·</span>');
-  host.innerHTML = items + '<span class="tag-dot">·</span>' + items;
+  skillFlow?.destroy();
+  const about = host.parentElement;
+  const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
+  const ready = fonts ? fonts.load('400 100px "Fixedsys Core"') : Promise.resolve();
+  skillFlow = mountSkillFlow(host, {
+    items: skills,
+    rows: 6,
+    cellPx: 44,
+    speed: 22,
+    radius: 150,
+    push: 20,
+    pointerTarget: about,
+    ready,
+  });
 }
 
 function renderLinks(): void {
@@ -136,7 +151,7 @@ function bindHeroLogoGrid(): void {
 applyStatic();
 renderWork();
 renderChips();
-renderMarquee();
+mountSkills();
 renderLinks();
 bindHeroLogoGrid();
 observeReveals();

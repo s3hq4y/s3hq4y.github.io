@@ -50,6 +50,42 @@ export const marquee = [
   'vscode-extension', 'code-oss', 'typescript', 'webgl', 'real-time-3d',
 ];
 
+// Technical skills, mirrored from readme/assets/skills.svg (grouped).
+export const skillGroups: { label: string; items: string[] }[] = [
+  {
+    label: 'languages',
+    items: ['TypeScript', 'JavaScript', 'Python', 'Java', 'C++', 'C#', 'Go', 'PHP', 'SQL'],
+  },
+  {
+    label: 'frontend',
+    items: [
+      'React', 'Next.js', 'Vue', 'Nuxt', 'Angular', 'Redux', 'React Native',
+      'Tailwind', 'SCSS', 'Material-UI', 'Framer Motion', 'GSAP', 'PWA',
+    ],
+  },
+  {
+    label: 'graphics',
+    items: ['Three.js', 'React Three Fiber', 'Babylon.js', 'PlayCanvas', 'PixiJS', 'Spine', 'WebGL'],
+  },
+  {
+    label: 'backend',
+    items: ['Node.js', 'Express', 'NestJS', 'Laravel', 'CodeIgniter', 'GraphQL', 'Apollo', 'REST'],
+  },
+  {
+    label: 'data',
+    items: ['PostgreSQL', 'MySQL', 'MongoDB', 'Redis', 'Firebase', 'Prisma'],
+  },
+  {
+    label: 'infra',
+    items: ['Docker', 'AWS', 'Nginx', 'Caddy', 'Git', 'NX', 'Jest'],
+  },
+];
+
+// Flat list for the About skill-flow canvas (deduped, order kept).
+export const skills: string[] = [
+  ...skillGroups.flatMap((g) => g.items),
+];
+
 export const links = [
   { label: 'GitHub', url: 'https://github.com/s3hq4y' },
   { label: 'Portal', url: 'https://github.com/s3hq4y/portal' },

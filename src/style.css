@@ -394,15 +394,38 @@ main, .topbar, .footer { position: relative; z-index: 3; }
 }
 
 /* ---------- about ---------- */
-.about-grid { display: grid; grid-template-columns: 1.4fr 1fr; gap: clamp(2rem, 6vw, 5rem); align-items: start; }
+.about-grid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: clamp(2rem, 6vw, 5rem);
+  align-items: start;
+  padding-bottom: clamp(70px, 12vw, 150px);
+}
+.about-text { position: relative; z-index: 1; }
 .about-text p { margin: 0 0 1.2rem; color: var(--fg-dim); max-width: 58ch; }
 .about-text p:first-child { color: var(--fg); font-size: 1.08rem; }
 
-.marquee { margin-top: 4.5rem; overflow: hidden; border-top: 1px solid var(--line-soft); border-bottom: 1px solid var(--line-soft); padding: 1.1rem 0; mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
-.marquee-track { display: flex; align-items: center; gap: 1.4rem; white-space: nowrap; width: max-content; animation: slide 34s linear infinite; }
-.marquee .tag { font-size: 0.82rem; letter-spacing: 0.08em; color: var(--fg-dim); }
-.marquee .tag-dot { color: var(--accent); }
-@keyframes slide { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+/* ---------- about: skill-flow backdrop ---------- */
+/* Chips flow right-to-left, sliced into a square tile grid; tiles near the
+   pointer are pushed away and spring back; the copy floats on top. */
+.skillflow {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  height: clamp(180px, 24vw, 300px);
+  overflow: hidden;
+  pointer-events: none;
+  mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 7%, #000 93%, transparent);
+}
+.skillflow canvas { display: block; width: 100%; height: 100%; }
+
+@media (max-width: 780px) {
+  .skillflow { height: 200px; }
+}
 
 /* ---------- contact ---------- */
 .contact { text-align: left; }
