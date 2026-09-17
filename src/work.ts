@@ -50,9 +50,8 @@ export function initWork(section: HTMLElement): WorkHandle {
           minCols: 12,
           maxCols: 26,
           cellPx: 56,
-          radius: 220,
+                    radius: 220,
           push: 30,
-          gap: 0.86,
         }),
       );
     });

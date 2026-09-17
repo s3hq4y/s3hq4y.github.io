@@ -21,8 +21,7 @@ export interface LogoGridOptions {
   maxCols?: number;
   cellPx?: number;
     radius?: number;
-  push?: number;
-  gap?: number;
+    push?: number;
 }
 
 export interface LogoGridHandle {
@@ -44,8 +43,7 @@ export function mountLogoGrid(host: HTMLElement, opts: LogoGridOptions): LogoGri
   const maxCols = opts.maxCols ?? 30;
   const cellPx = opts.cellPx ?? 52;
     const radius = opts.radius ?? 200;
-  const push = opts.push ?? 26;
-  const gap = opts.gap ?? 1;
+    const push = opts.push ?? 26;
   const target = opts.pointerTarget ?? host.parentElement ?? host;
 
   const canvas = document.createElement('canvas');
@@ -74,10 +72,10 @@ export function mountLogoGrid(host: HTMLElement, opts: LogoGridOptions): LogoGri
   const render = (): void => {
     if (!ctx) return;
     ctx.clearRect(0, 0, cssW, cssH);
-        const dw = cell * gap + 0.5;
-    const dh = cell * gap + 0.5;
-    const sw = cell * dpr + 1;
-    const sh = cell * dpr + 1;
+        const dw = cell + 0.5;
+        const dh = cell + 0.5;
+        const sw = cell * dpr + 1;
+        const sh = cell * dpr + 1;
     for (let i = 0; i < tiles.length; i++) {
       const t = tiles[i];
       ctx.drawImage(src, t.ox, t.oy, sw, sh, t.cx - cell / 2 + t.tx, t.cy - cell / 2 + t.ty, dw, dh);

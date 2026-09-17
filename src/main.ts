@@ -130,7 +130,6 @@ function bindHeroLogoGrid(): void {
     cellPx: 52,
     radius: 200,
     push: 26,
-    gap: 0.9,
   });
 }
 
