@@ -6,6 +6,15 @@
   font-display: swap;
 }
 
+/* Zpix (最像素) — CJK pixel font, used for Chinese glyphs. */
+@font-face {
+  font-family: 'Zpix';
+  src: url('./fonts/zpix.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   --bg: #060608;
   --bg-soft: #0c0c11;
@@ -30,7 +39,7 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--fg);
-  font-family: "Fixedsys Core", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", monospace;
+  font-family: "Fixedsys Core", "Zpix", "Segoe UI", system-ui, -apple-system, "Helvetica Neue", "PingFang SC", "Microsoft YaHei", monospace;
   font-size: clamp(15px, 1.02vw, 17px);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -285,40 +294,77 @@ main, .topbar, .footer { position: relative; z-index: 3; }
 }
 .section-desc { margin: 0; color: var(--fg-dim); }
 
-/* ---------- work cards ---------- */
-.works { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
-
-.card {
+/* ---------- work: horizontal pinned gallery ---------- */
+.work {
+  position: relative;
+  max-width: none;
+  padding: 0;
+}
+.work-sticky {
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.work-intro {
+  padding: clamp(2rem, 6vw, 4rem) var(--pad) 1.5rem;
+  max-width: 60ch;
+}
+.work-intro h2 { margin: 0 0 0.6rem; font-size: clamp(1.7rem, 3.6vw, 2.6rem); letter-spacing: -0.03em; font-weight: 800; }
+.work-progress {
+  margin-top: 1.4rem;
+  width: min(320px, 42vw);
+  height: 2px;
+  background: var(--line);
   position: relative;
   overflow: hidden;
-  padding: 2rem;
-  border-radius: 0;
-  border: 1px solid var(--line);
-  background: linear-gradient(165deg, rgba(255, 255, 255, 0.045), rgba(255, 255, 255, 0.012));
-  backdrop-filter: blur(10px);
-  transform-style: preserve-3d;
-  transition: transform 0.5s var(--ease), border-color 0.5s var(--ease);
 }
-.card::before {
-  content: '';
+.work-progress span {
   position: absolute;
   inset: 0;
-  border-radius: 0;
-  background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), color-mix(in srgb, var(--accent) 22%, transparent), transparent 62%);
-  opacity: 0;
-  transition: opacity 0.5s var(--ease);
-  pointer-events: none;
+  background: var(--accent);
+  transform-origin: left;
+  transform: scaleX(var(--progress, 0));
 }
-.card:hover { border-color: color-mix(in srgb, var(--accent) 55%, transparent); transform: translateY(-6px); }
-.card:hover::before { opacity: 1; }
 
-.card-head { display: flex; justify-content: space-between; align-items: center; font-size: 0.72rem; letter-spacing: 0.16em; color: var(--fg-faint); }
-.card-lang { color: color-mix(in srgb, var(--accent) 80%, white); }
-.card-name { margin: 1.4rem 0 0.3rem; font-size: 1.85rem; letter-spacing: -0.02em; font-weight: 800; }
-.card-tag { margin: 0 0 1.2rem; font-size: 0.82rem; letter-spacing: 0.03em; color: var(--accent); }
-.card-desc { margin: 0 0 1.4rem; color: var(--fg-dim); font-size: 0.94rem; }
-.card-topics { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; margin: 0 0 1.6rem; padding: 0; }
-.card-topics li {
+.work-track {
+  display: flex;
+  height: 62svh;
+  will-change: transform;
+}
+.work-panel {
+  position: relative;
+  flex: 0 0 100vw;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 0 var(--pad);
+  border-right: 1px solid var(--line-soft);
+}
+.work-grid {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0.34;
+  pointer-events: none;
+  -webkit-mask-image: radial-gradient(90% 90% at 78% 50%, #000 30%, transparent 78%);
+  mask-image: radial-gradient(90% 90% at 78% 50%, #000 30%, transparent 78%);
+}
+.work-inner {
+  position: relative;
+  z-index: 1;
+  max-width: 620px;
+}
+.work-head { display: flex; justify-content: space-between; align-items: center; max-width: 620px; font-size: 0.72rem; letter-spacing: 0.16em; color: var(--fg-faint); }
+.work-lang { color: color-mix(in srgb, var(--accent) 80%, white); }
+.work-name { margin: 1rem 0 0.3rem; font-size: clamp(2.4rem, 5.5vw, 4rem); letter-spacing: -0.03em; font-weight: 800; }
+.work-tag { margin: 0 0 1.2rem; font-size: 0.9rem; letter-spacing: 0.03em; color: var(--accent); }
+.work-desc { margin: 0 0 1.4rem; color: var(--fg-dim); font-size: 0.96rem; }
+.work-topics { display: flex; flex-wrap: wrap; gap: 0.4rem; list-style: none; margin: 0 0 1.6rem; padding: 0; }
+.work-topics li {
   font-size: 0.68rem;
   letter-spacing: 0.04em;
   color: var(--fg-faint);
@@ -326,10 +372,10 @@ main, .topbar, .footer { position: relative; z-index: 3; }
   border: 1px solid var(--line-soft);
   border-radius: 0;
 }
-.card-foot { display: flex; justify-content: space-between; align-items: center; padding-top: 1.2rem; border-top: 1px solid var(--line-soft); }
-.card-meta { font-size: 0.74rem; color: var(--fg-faint); }
-.card-link { font-size: 0.84rem; font-weight: 600; color: var(--fg); transition: color 0.25s var(--ease); }
-.card-link:hover { color: var(--accent); }
+.work-foot { display: flex; justify-content: space-between; align-items: center; max-width: 620px; padding-top: 1.2rem; border-top: 1px solid var(--line-soft); }
+.work-meta { font-size: 0.74rem; color: var(--fg-faint); }
+.work-link { font-size: 0.84rem; font-weight: 600; color: var(--fg); transition: color 0.25s var(--ease); }
+.work-link:hover { color: var(--accent); }
 
 /* ---------- hero logo grid ---------- */
 .hero-logo {
@@ -399,7 +445,29 @@ main, .topbar, .footer { position: relative; z-index: 3; }
 /* ---------- reveal ---------- */
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
 .reveal.in { opacity: 1; transform: none; }
-.card.reveal { transition-delay: var(--d, 0ms); }
+
+/* ---------- CJK sizing: keep the Chinese hero visually on par with English ---------- */
+:lang(zh-CN) .title { font-size: clamp(2.15rem, 6.4vw, 5.1rem); line-height: 1.08; letter-spacing: -0.01em; }
+:lang(zh-CN) .lede { font-size: clamp(0.98rem, 1.32vw, 1.12rem); line-height: 1.75; }
+:lang(zh-CN) .section-head h2 { font-size: clamp(1.7rem, 3.9vw, 2.85rem); }
+:lang(zh-CN) .work-intro h2 { font-size: clamp(1.55rem, 3.2vw, 2.35rem); }
+:lang(zh-CN) .work-name { font-size: clamp(2rem, 4.6vw, 3.3rem); }
+:lang(zh-CN) .work-desc { line-height: 1.8; }
+
+/* ---------- work: stacked fallback ---------- */
+@media (max-width: 820px), (prefers-reduced-motion: reduce) {
+  .work-sticky { position: static; height: auto; }
+  .work-track { flex-direction: column; height: auto; }
+  .work-panel {
+    flex: 0 0 auto;
+    min-height: 100svh;
+    padding: 6rem var(--pad) 4rem;
+    border-right: none;
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .work-grid { -webkit-mask-image: radial-gradient(90% 80% at 50% 40%, #000 30%, transparent 80%); mask-image: radial-gradient(90% 80% at 50% 40%, #000 30%, transparent 80%); }
+  .work-progress { display: none; }
+}
 
 @media (max-width: 780px) {
   .about-grid { grid-template-columns: 1fr; }
