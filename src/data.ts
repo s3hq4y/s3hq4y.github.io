@@ -90,6 +90,7 @@ export const links = [
   { label: 'GitHub', url: 'https://github.com/s3hq4y' },
   { label: 'Portal', url: 'https://github.com/s3hq4y/portal' },
   { label: 'Wibe', url: 'https://github.com/s3hq4y/wibe' },
+  { label: 'CIV', url: 'https://civ.s9y.workers.dev/' },
 ];
 
 export const strings: Record<Lang, Record<string, string>> = {
@@ -98,6 +99,7 @@ export const strings: Record<Lang, Record<string, string>> = {
     'nav.about': '关于',
     'nav.contact': '联系',
     'nav.blog': '博客',
+    'nav.civ': 'CIV',
     'nav.space': '空间',
     'hero.eyebrow': '视觉作品集 · 2026',
     'hero.t1': '从零构建',
@@ -122,6 +124,7 @@ export const strings: Record<Lang, Record<string, string>> = {
     'nav.about': 'About',
     'nav.contact': 'Contact',
     'nav.blog': 'Blog',
+    'nav.civ': 'CIV',
     'nav.space': 'Space',
     'hero.eyebrow': 'Visual portfolio · 2026',
     'hero.t1': 'Built from zero',

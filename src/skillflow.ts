@@ -34,10 +34,72 @@ interface Tile {
 }
 
 const FONT = '"Fixedsys Core", "Zpix", monospace';
-const GAP = 14;
-const PADX = 12;
-const CHIP_H = 26;
+const GAP = 0;
+const PADX = 9;
+const ICON = 12;
+const ICON_GAP = 6;
 const FONT_PX = 13;
+
+// Icons are pulled from the Simple Icons CDN. Anything that fails to resolve
+// simply falls back to the colored square badge, so the layout never breaks.
+const ICON_BASE = 'https://cdn.simpleicons.org/';
+const ICON_SLUG: Record<string, string> = {
+  'TypeScript': 'typescript', 'JavaScript': 'javascript', 'Python': 'python',
+  'Java': 'java', 'C++': 'cplusplus', 'C#': 'csharp', 'Go': 'go', 'PHP': 'php',
+  'React': 'react', 'Next.js': 'nextdotjs', 'Vue': 'vuedotjs', 'Nuxt': 'nuxt',
+  'Angular': 'angular', 'Redux': 'redux', 'React Native': 'react',
+  'Tailwind': 'tailwindcss', 'SCSS': 'sass', 'Material-UI': 'mui',
+  'Framer Motion': 'framer', 'GSAP': 'greensock', 'PWA': 'pwa',
+  'Three.js': 'threedotjs', 'React Three Fiber': 'threedotjs',
+  'Babylon.js': 'babylonjs', 'PlayCanvas': 'playcanvas', 'PixiJS': 'pixijs',
+  'WebGL': 'webgl', 'Node.js': 'nodedotjs', 'Express': 'express',
+  'NestJS': 'nestjs', 'Laravel': 'laravel', 'CodeIgniter': 'codeigniter',
+  'GraphQL': 'graphql', 'Apollo': 'apollographql', 'REST': 'rest',
+  'PostgreSQL': 'postgresql', 'MySQL': 'mysql', 'MongoDB': 'mongodb',
+  'Redis': 'redis', 'Firebase': 'firebase', 'Prisma': 'prisma',
+  'Docker': 'docker', 'AWS': 'amazonaws', 'Nginx': 'nginx', 'Caddy': 'caddy',
+  'Git': 'git', 'NX': 'nx', 'Jest': 'jest',
+};
+
+const iconCache = new Map<string, HTMLImageElement>();
+
+function loadIcon(label: string, onReady: () => void): void {
+  if (iconCache.has(label)) return;
+  const slug = ICON_SLUG[label];
+  if (!slug) {
+    iconCache.set(label, null as unknown as HTMLImageElement);
+    return;
+  }
+  const img = new Image();
+  img.crossOrigin = 'anonymous';
+  img.onload = () => { iconCache.set(label, img); onReady(); };
+  img.onerror = () => { iconCache.set(label, null as unknown as HTMLImageElement); };
+  img.src = ICON_BASE + slug;
+}
+
+// A distinct accent color per skill chip: hashing the label keeps a given
+// skill the same color wherever it appears in the flow.
+const PALETTE = [
+  '#ff2d6f', '#4d7cff', '#a855f7', '#06b6d4', '#f59e0b', '#10b981',
+  '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#6366f1',
+];
+
+function hashStr(s: string): number {
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return Math.abs(h);
+}
+
+function withAlpha(hex: string, a: number): string {
+  const r = parseInt(hex.slice(1, 3), 16);
+  const g = parseInt(hex.slice(3, 5), 16);
+  const b = parseInt(hex.slice(5, 7), 16);
+  return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+}
+
+// Chip height is derived from the row height at build time so adjacent rows
+// touch with no vertical seams.
+let chipH = 26;
 
 function mod(n: number, m: number): number {
   return ((n % m) + m) % m;
@@ -86,24 +148,34 @@ export function mountSkillFlow(host: HTMLElement, opts: SkillFlowOptions): Skill
     sctx.font = FONT_PX + 'px ' + FONT;
     widths.length = 0;
     cycleW = 0;
+    const invalidate = (): void => { if (!dead) drawSource(); };
     for (const it of items) {
-      const w = Math.round(sctx.measureText(it).width) + PADX * 2;
+      loadIcon(it, invalidate);
+      const w = Math.round(sctx.measureText(it).width) + PADX * 2 + ICON + ICON_GAP;
       widths.push(w);
       cycleW += w + GAP;
     }
     if (cycleW <= 0) cycleW = 1;
   };
 
-  const drawChip = (x: number, y: number, w: number, idx: number, label: string): void => {
+  const drawChip = (x: number, y: number, w: number, label: string): void => {
     if (!sctx) return;
-    const pink = idx % 2 === 0;
-    sctx.fillStyle = pink ? 'rgba(255,45,111,0.10)' : 'rgba(77,124,255,0.10)';
-    sctx.strokeStyle = pink ? 'rgba(255,45,111,0.42)' : 'rgba(77,124,255,0.42)';
+    const color = PALETTE[hashStr(label) % PALETTE.length];
+    sctx.fillStyle = withAlpha(color, 0.13);
+    sctx.strokeStyle = withAlpha(color, 0.6);
     sctx.lineWidth = 1;
-    sctx.fillRect(x, y - CHIP_H / 2, w, CHIP_H);
-    sctx.strokeRect(x + 0.5, y - CHIP_H / 2 + 0.5, w - 1, CHIP_H - 1);
-    sctx.fillStyle = 'rgba(244,244,247,0.72)';
-    sctx.fillText(label, x + PADX, y);
+    sctx.fillRect(x, y - chipH / 2, w, chipH);
+    sctx.strokeRect(x + 0.5, y - chipH / 2 + 0.5, w - 1, chipH - 1);
+    // Icon slot: brand glyph when available, colored square otherwise.
+    const icon = iconCache.get(label);
+    if (icon && icon.complete && icon.naturalWidth) {
+      sctx.drawImage(icon, x + PADX, y - ICON / 2, ICON, ICON);
+    } else {
+      sctx.fillStyle = withAlpha(color, 0.95);
+      sctx.fillRect(x + PADX, y - ICON / 2, ICON, ICON);
+    }
+    sctx.fillStyle = 'rgba(244,244,247,0.86)';
+    sctx.fillText(label, x + PADX + ICON + ICON_GAP, y);
   };
 
   const drawSource = (): void => {
@@ -120,7 +192,7 @@ export function mountSkillFlow(host: HTMLElement, opts: SkillFlowOptions): Skill
       while (x < cssW) {
         const idx = mod(i + r * 3, items.length);
         const w = widths[idx];
-        drawChip(x, y, w, idx, items[idx]);
+        drawChip(x, y, w, items[idx]);
         x += w + GAP;
         i++;
       }
@@ -157,6 +229,7 @@ export function mountSkillFlow(host: HTMLElement, opts: SkillFlowOptions): Skill
     src.height = canvas.height;
 
     rowH = cssH / rows;
+    chipH = Math.max(18, rowH);
     const minCols = 10;
     const maxCols = 26;
     cols = Math.max(minCols, Math.min(maxCols, Math.round(cssW / cellPx)));
