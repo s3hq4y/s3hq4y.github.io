@@ -3,7 +3,7 @@ import { createStage } from './scene';
 import { mountLogoGrid, textPainter } from './logogrid';
 import { mountSkillFlow, type SkillFlowHandle } from './skillflow';
 import { initWork, type WorkHandle } from './work';
-import { chips, links, projects, skills, strings, type Lang } from './data';
+import { chips, civFeatures, links, projects, skills, strings, type Lang } from './data';
 
 const root = document.documentElement;
 const stored = localStorage.getItem('s9y.lang');
@@ -43,6 +43,20 @@ function renderWork(): void {
           <span class="work-meta">${p.license} · ★ ${p.stars}</span>
           <a class="work-link" data-p="repo" href="${p.url}" target="_blank" rel="noopener noreferrer">${t('work.repo')} ↗</a>
         </footer>
+      </div>
+    </article>
+  `).join('');
+}
+
+function renderCivFeatures(): void {
+  const host = document.getElementById('civFeatures');
+  if (!host) return;
+  host.innerHTML = civFeatures.map((f, i) => `
+    <article class="civ-feature">
+      <span class="civ-fnum">${String(i + 1).padStart(2, '0')}</span>
+      <div class="civ-ftext">
+        <h3 class="civ-ftitle">${t('civ.' + f.key + '.t')}</h3>
+        <p class="civ-fdesc">${t('civ.' + f.key + '.d')}</p>
       </div>
     </article>
   `).join('');
@@ -113,6 +127,7 @@ document.getElementById('lang')?.addEventListener('click', () => {
   localStorage.setItem('s9y.lang', lang);
   applyStatic();
   renderWork();
+  renderCivFeatures();
   startWork();
   observeReveals();
 });
@@ -150,6 +165,7 @@ function bindHeroLogoGrid(): void {
 
 applyStatic();
 renderWork();
+renderCivFeatures();
 renderChips();
 mountSkills();
 renderLinks();

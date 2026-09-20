@@ -10,7 +10,7 @@
   <meta property="og:title" content="s9y — Visual Portfolio" />
   <meta property="og:description" content="Web systems, interaction and real-time 3D on the web." />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23060608'/%3E%3Crect x='8' y='8' width='16' height='16' fill='%23ff2d6f'/%3E%3C/svg%3E" />
-  <script type="module" crossorigin src="/assets/index-D-pcABVA.js"></script>
+  <script type="module" crossorigin src="/assets/index-DOydlT26.js"></script>
   <link rel="modulepreload" crossorigin href="/assets/engineStore-Bn2tApal.js">
   <link rel="modulepreload" crossorigin href="/assets/internalTexture-bdC_Go5i.js">
   <link rel="modulepreload" crossorigin href="/assets/logger-CuBYPcDK.js">
@@ -21,7 +21,7 @@
   <link rel="modulepreload" crossorigin href="/assets/math.scalar.functions-lnL7TJ7T.js">
   <link rel="modulepreload" crossorigin href="/assets/halfFloat-Cfx5m4ll.js">
   <link rel="modulepreload" crossorigin href="/assets/math.color.pure-DtcjUIv_.js">
-  <link rel="stylesheet" crossorigin href="/assets/index-CN-PW4Tp.css">
+  <link rel="stylesheet" crossorigin href="/assets/index-CEyMX0Wv.css">
 </head>
 <body>
   <canvas id="stage" aria-hidden="true"></canvas>
@@ -36,6 +36,7 @@
     </a>
     <nav class="nav" aria-label="Primary">
       <a href="#work" data-i18n="nav.work">作品</a>
+      <a href="#civ" data-i18n="nav.civGame">游戏</a>
       <a href="#about" data-i18n="nav.about">关于</a>
       <a href="#contact" data-i18n="nav.contact">联系</a>
       <a href="/blogs/" data-i18n="nav.blog">博客</a>
@@ -84,9 +85,55 @@
       </div>
     </section>
 
+    <section id="civ" class="section civ">
+      <header class="section-head reveal">
+        <span class="num" data-i18n="civ.num">02</span>
+        <p class="eyebrow civ-eyebrow"><span class="pulse"></span><span data-i18n="civ.eyebrow">可玩 · 浏览器大策略</span></p>
+        <h2 data-i18n="civ.title">Civ · 极简大策略</h2>
+        <p class="section-desc" data-i18n="civ.lede">EU4 风格的浏览器大战略游戏 —— 数据驱动、可 mod、可扩展。</p>
+      </header>
+
+      <div class="civ-grid reveal">
+        <figure class="civ-shot civ-shot--hero">
+          <img src="/civ/globe-atlantic.jpg" alt="Civ 地球模式" loading="lazy" decoding="async" />
+        </figure>
+        <figure class="civ-shot">
+          <img src="/civ/political.jpg" alt="Civ 政治地图模式" loading="lazy" decoding="async" />
+        </figure>
+        <figure class="civ-shot">
+          <img src="/civ/terrain.jpg" alt="Civ 地形地图模式" loading="lazy" decoding="async" />
+        </figure>
+        <figure class="civ-shot">
+          <img src="/civ/globe-americas.jpg" alt="Civ 地球模式 · 南美洲" loading="lazy" decoding="async" />
+        </figure>
+        <figure class="civ-shot">
+          <img src="/civ/units.jpg" alt="Civ 军队圆标与行军箭头" loading="lazy" decoding="async" />
+        </figure>
+      </div>
+
+      <ul class="civ-metrics reveal">
+        <li><strong>560</strong><span data-i18n="civ.m1">11 国 · 560 省</span></li>
+        <li><strong>1,002</strong><span data-i18n="civ.m2">殖民 · 真实地球</span></li>
+        <li><strong>409</strong><span data-i18n="civ.m3">409 项测试</span></li>
+        <li><strong>JSON</strong><span data-i18n="civ.m4">全数据驱动</span></li>
+      </ul>
+
+      <div class="civ-body">
+        <div class="civ-features reveal" id="civFeatures"></div>
+        <aside class="civ-side reveal">
+          <div class="civ-cta">
+            <a class="btn primary" href="https://civ.s9y.workers.dev/" target="_blank" rel="noopener" data-i18n="civ.play">开始游玩</a>
+          </div>
+          <h3 class="civ-sub" data-i18n="civ.techTitle">技术栈</h3>
+          <p class="civ-tech" data-i18n="civ.tech">TypeScript · React 19 · PixiJS 8 · Babylon.js · Zustand · Tailwind 4 · Vitest · Vite 8</p>
+          <p class="civ-note" data-i18n="civ.note">引擎零 UI 依赖，可脱离浏览器跑几百年的 AI 自动对战来验证平衡性。</p>
+        </aside>
+      </div>
+    </section>
+
     <section id="about" class="section">
       <header class="section-head reveal">
-        <span class="num">02</span>
+        <span class="num">03</span>
         <h2 data-i18n="about.title">关于</h2>
       </header>
       <div class="about-grid">
@@ -100,7 +147,7 @@
 
     <section id="contact" class="section">
       <header class="section-head reveal">
-        <span class="num">03</span>
+        <span class="num">04</span>
         <h2 data-i18n="contact.title">联系</h2>
       </header>
       <div class="contact reveal">

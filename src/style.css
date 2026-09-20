@@ -500,6 +500,67 @@ main, .topbar, .footer { position: relative; z-index: 3; }
 }
 .footer-sep { color: var(--accent); }
 
+/* ---------- civ: playable game showcase ---------- */
+.civ .section-head { margin-bottom: 2.4rem; }
+.civ-eyebrow { display: inline-flex; align-items: center; gap: 0.6rem; font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--accent); margin: 0 0 0.9rem; }
+
+.civ-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-auto-rows: minmax(0, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.8rem;
+}
+.civ-shot {
+  position: relative;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bg-soft);
+}
+.civ-shot--hero { grid-column: span 2; grid-row: span 2; }
+.civ-shot img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform 0.7s var(--ease), filter 0.5s var(--ease); filter: saturate(0.92) brightness(0.94); }
+.civ-shot:hover img { transform: scale(1.04); filter: saturate(1.05) brightness(1); }
+.civ-shot::after { content: ''; position: absolute; inset: 0; pointer-events: none; box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.04); background: linear-gradient(180deg, transparent 55%, rgba(6, 6, 8, 0.5)); }
+.civ-shot--hero::after { background: linear-gradient(180deg, transparent 65%, rgba(6, 6, 8, 0.55)); }
+
+.civ-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0.75rem;
+  list-style: none;
+  margin: 0 0 clamp(2.4rem, 5vw, 3.6rem);
+  padding: 0;
+}
+.civ-metrics li { display: flex; flex-direction: column; gap: 0.35rem; padding: 1rem 1.1rem; border: 1px solid var(--line-soft); background: linear-gradient(180deg, rgba(255, 255, 255, 0.025), transparent); }
+.civ-metrics strong { font-size: clamp(1.3rem, 2.6vw, 1.9rem); letter-spacing: -0.02em; color: var(--fg); }
+.civ-metrics span { font-size: 0.74rem; letter-spacing: 0.04em; color: var(--fg-faint); }
+
+.civ-body { display: grid; grid-template-columns: 1.5fr 1fr; gap: clamp(2rem, 5vw, 4.5rem); align-items: start; }
+.civ-features { display: flex; flex-direction: column; }
+.civ-feature { display: grid; grid-template-columns: auto 1fr; gap: 1.1rem; padding: 1.35rem 0; border-top: 1px solid var(--line-soft); }
+.civ-feature:last-child { border-bottom: 1px solid var(--line-soft); }
+.civ-fnum { font-size: 0.78rem; letter-spacing: 0.14em; color: var(--accent); padding-top: 0.25rem; }
+.civ-ftitle { margin: 0 0 0.4rem; font-size: 1.02rem; letter-spacing: -0.01em; font-weight: 700; }
+.civ-fdesc { margin: 0; color: var(--fg-dim); font-size: 0.95rem; line-height: 1.7; }
+
+.civ-side { position: sticky; top: 6rem; padding: 1.6rem; border: 1px solid var(--line); background: linear-gradient(180deg, rgba(255, 255, 255, 0.03), rgba(255, 255, 255, 0)); backdrop-filter: blur(6px); }
+.civ-cta { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-bottom: 1.8rem; }
+.civ-sub { margin: 0 0 0.6rem; font-size: 0.74rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--fg-faint); }
+.civ-tech { margin: 0 0 1.2rem; font-size: 0.86rem; line-height: 1.7; color: var(--fg-dim); }
+.civ-note { margin: 0; padding-top: 1.2rem; border-top: 1px solid var(--line-soft); font-size: 0.82rem; line-height: 1.7; color: var(--fg-faint); }
+
+@media (max-width: 980px) {
+  .civ-grid { grid-template-columns: repeat(2, 1fr); }
+  .civ-shot--hero { grid-column: span 2; grid-row: span 1; }
+  .civ-body { grid-template-columns: 1fr; }
+  .civ-side { position: static; }
+}
+@media (max-width: 560px) {
+  .civ-metrics { grid-template-columns: repeat(2, 1fr); }
+  .civ-grid { gap: 0.5rem; }
+}
+
 /* ---------- reveal ---------- */
 .reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.9s var(--ease), transform 0.9s var(--ease); }
 .reveal.in { opacity: 1; transform: none; }
@@ -529,8 +590,19 @@ main, .topbar, .footer { position: relative; z-index: 3; }
 
 @media (max-width: 780px) {
   .about-grid { grid-template-columns: 1fr; }
-  .nav { gap: 1.1rem; }
   .cursor-glow { display: none; }
+  /* The nav now carries seven items; on narrow screens let it scroll
+     horizontally instead of squeezing each label onto two lines. */
+  .topbar { gap: 0.75rem; padding-left: 1.1rem; padding-right: 1.1rem; }
+  .nav {
+    gap: 1rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav::-webkit-scrollbar { display: none; }
+  .nav a { white-space: nowrap; }
 }
 
 @media (prefers-reduced-motion: reduce) {
