@@ -86,30 +86,7 @@ export const skills: string[] = [
   ...skillGroups.flatMap((g) => g.items),
 ];
 
-// CIV — the game section. Screenshots live in public/civ/ (see README).
-export const civGallery: { src: string; alt: Record<Lang, string> }[] = [
-  {
-    src: '/civ/globe-atlantic.jpg',
-    alt: { zh: '地球模式：大西洋视角下的非洲与欧亚大陆', en: 'Globe mode: Africa and Eurasia over the Atlantic' },
-  },
-  {
-    src: '/civ/globe-americas.jpg',
-    alt: { zh: '地球模式：南美洲与真实大陆', en: 'Globe mode: South America on the real continents' },
-  },
-  {
-    src: '/civ/political.jpg',
-    alt: { zh: '政治地图模式：整省刷色的列国领土', en: 'Political map mode: provinces painted by owner' },
-  },
-  {
-    src: '/civ/terrain.jpg',
-    alt: { zh: '地形地图模式：按高程分类的真实地形', en: 'Terrain map mode: real elevation-classified terrain' },
-  },
-  {
-    src: '/civ/units.jpg',
-    alt: { zh: '军队圆标与行军箭头', en: 'Army markers and march arrows' },
-  },
-];
-
+// CIV — the game section. Screenshots are inlined in index.html.
 export const civFeatures: { key: string }[] = [
   { key: 'f1' },
   { key: 'f2' },
@@ -158,17 +135,17 @@ export const strings: Record<Lang, Record<string, string>> = {
     'civ.m3': '409 项测试',
     'civ.m4': '全数据驱动',
     'civ.featuresTitle': '已实现',
-    'civ.f1.t': 'M1 · 地图',
+    'civ.f1.t': '地图',
     'civ.f1.d': 'Voronoi 省份 + 海洋 + 地形，同一种子生成完全相同的世界。',
-    'civ.f2.t': 'M2 · 经济',
+    'civ.f2.t': '经济',
     'civ.f2.d': '税收、建筑、贷款、通胀与稳定度，逐月结算，Modifier 栈可追溯每个数字的来源。',
-    'civ.f3.t': 'M3 · 战争',
+    'civ.f3.t': '战争',
     'civ.f3.d': '招募、寻路、会战、围城、战争分数与和约，配上效用打分的 AI。',
-    'civ.f4.t': 'M3.5 · 外交',
+    'civ.f4.t': '外交',
     'civ.f4.d': '关系度、同盟、保障、宿敌、附庸与通行权，还有触发多方联合阵线的侵略扩张度。',
-    'civ.f5.t': 'M4–M5 · 科技与事件',
+    'civ.f5.t': '科技与事件',
     'civ.f5.d': '君主点数、理念组、君主与将领、事件链、看海模式、控制台与古典配色。',
-    'civ.f6.t': 'M6 · 殖民与地球',
+    'civ.f6.t': '殖民与地球',
     'civ.f6.d': '海路拓新地，或直接在真实地球 1,002 省上玩 —— 历史 1444 与幻想随机两个场景。',
     'civ.techTitle': '技术栈',
     'civ.tech': 'TypeScript · React 19 · PixiJS 8 · Babylon.js · Zustand · Tailwind 4 · Vitest · Vite 8',
@@ -209,17 +186,17 @@ export const strings: Record<Lang, Record<string, string>> = {
     'civ.m3': '409 tests',
     'civ.m4': 'Fully data-driven',
     'civ.featuresTitle': 'Shipped',
-    'civ.f1.t': 'M1 · Map',
+    'civ.f1.t': 'Map',
     'civ.f1.d': 'Voronoi provinces, oceans and terrain; the same seed always yields the same world.',
-    'civ.f2.t': 'M2 · Economy',
+    'civ.f2.t': 'Economy',
     'civ.f2.d': 'Tax, buildings, loans, inflation and stability settled monthly, with a modifier stack tracing every number to its source.',
-    'civ.f3.t': 'M3 · War',
+    'civ.f3.t': 'War',
     'civ.f3.d': 'Recruitment, pathfinding, battles, sieges, war score and peace deals, driven by a utility-scoring AI.',
-    'civ.f4.t': 'M3.5 · Diplomacy',
+    'civ.f4.t': 'Diplomacy',
     'civ.f4.d': 'Opinion, alliances, guarantees, rivals, vassals and military access — plus aggressive expansion that triggers coalition wars.',
-    'civ.f5.t': 'M4–M5 · Tech & Events',
+    'civ.f5.t': 'Tech & Events',
     'civ.f5.d': 'Monarch points, idea groups, rulers and generals, event chains, observe mode, a console and a classical palette.',
-    'civ.f6.t': 'M6 · Colonization & Earth',
+    'civ.f6.t': 'Colonization & Earth',
     'civ.f6.d': 'Colonize by sea, or play directly on the real Earth in 1,002 provinces — historical 1444 and fantasy random scenarios.',
     'civ.techTitle': 'Stack',
     'civ.tech': 'TypeScript · React 19 · PixiJS 8 · Babylon.js · Zustand · Tailwind 4 · Vitest · Vite 8',
