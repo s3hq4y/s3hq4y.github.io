@@ -76,7 +76,7 @@ function mountSkills(): void {
   skillFlow?.destroy();
   const about = host.parentElement;
   const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
-  const ready = fonts ? fonts.load('400 100px "Fixedsys Core"') : Promise.resolve();
+  const ready = fonts ? fonts.load('500 13px "IBM Plex Mono"') : Promise.resolve();
   skillFlow = mountSkillFlow(host, {
     items: skills,
     rows: 6,
@@ -147,6 +147,7 @@ function bindHeroLogoGrid(): void {
   const hero = host.parentElement;
   if (!hero) return;
 
+  // Pixel wordmark: Fixedsys Core for latin, Zpix for CJK fallback.
   const FONT = '"Fixedsys Core", "Zpix", monospace';
   const fonts = (document as Document & { fonts?: FontFaceSet }).fonts;
   const ready = fonts ? fonts.load('400 100px "Fixedsys Core"') : Promise.resolve();

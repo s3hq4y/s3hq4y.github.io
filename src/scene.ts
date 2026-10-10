@@ -31,7 +31,7 @@ export function createStage(canvas: HTMLCanvasElement): () => void {
   // Cap render resolution at 1.5x DPR: full HiDPI costs ~4x pixels for little visible gain.
   engine.setHardwareScalingLevel(1 / Math.min(window.devicePixelRatio || 1, 1.5));
   const scene = new Scene(engine);
-  scene.clearColor = new Color4(0.024, 0.024, 0.031, 1);
+  scene.clearColor = new Color4(0.039, 0.039, 0.043, 1);
 
   const camera = new ArcRotateCamera('cam', Math.PI * 0.35, Math.PI * 0.42, 11.5, Vector3.Zero(), scene);
   camera.fov = 0.92;
@@ -40,30 +40,30 @@ export function createStage(canvas: HTMLCanvasElement): () => void {
 
   const hemi = new HemisphericLight('hemi', new Vector3(0, 1, 0), scene);
   hemi.intensity = 0.32;
-  hemi.groundColor = new Color3(0.06, 0.02, 0.05);
+  hemi.groundColor = new Color3(0.05, 0.05, 0.05);
 
   const key = new PointLight('key', new Vector3(7, 9, -8), scene);
   key.intensity = 90;
   key.radius = 3;
-  key.diffuse = new Color3(1, 0.35, 0.55);
+  key.diffuse = new Color3(1, 0.18, 0.28);
 
   const rim = new PointLight('rim', new Vector3(-9, -5, 7), scene);
   rim.intensity = 70;
   rim.radius = 3;
-  rim.diffuse = new Color3(0.35, 0.5, 1);
+  rim.diffuse = new Color3(1, 1, 1);
 
   const coreMat = new PBRMaterial('coreMat', scene);
   coreMat.albedoColor = new Color3(0.055, 0.055, 0.07);
   coreMat.metallic = 0.95;
   coreMat.roughness = 0.22;
-  coreMat.emissiveColor = new Color3(0.42, 0.03, 0.14);
+  coreMat.emissiveColor = new Color3(0.36, 0.01, 0.07);
 
   const core = MeshBuilder.CreateIcoSphere('core', { radius: 2.05, subdivisions: 4, flat: true }, scene);
   core.material = coreMat;
 
   const shellMat = new StandardMaterial('shellMat', scene);
   shellMat.wireframe = true;
-  shellMat.emissiveColor = new Color3(0.95, 0.14, 0.42);
+  shellMat.emissiveColor = new Color3(0.9, 0.02, 0.18);
   shellMat.diffuseColor = new Color3(0, 0, 0);
   shellMat.disableLighting = true;
   shellMat.alpha = 0.5;
@@ -72,9 +72,9 @@ export function createStage(canvas: HTMLCanvasElement): () => void {
   shell.material = shellMat;
 
   const ringColors = [
-    new Color3(0.98, 0.16, 0.45),
-    new Color3(0.34, 0.55, 1),
-    new Color3(1, 0.74, 0.32),
+    new Color3(0.9, 0.02, 0.18),
+    new Color3(1, 1, 1),
+    new Color3(0.55, 0.55, 0.6),
   ];
   const rings: Mesh[] = [];
   for (let i = 0; i < ringColors.length; i++) {
@@ -95,7 +95,7 @@ export function createStage(canvas: HTMLCanvasElement): () => void {
 
   const moteField = new TransformNode('moteField', scene);
   const moteMat = new StandardMaterial('moteMat', scene);
-  moteMat.emissiveColor = new Color3(1, 0.88, 0.94);
+  moteMat.emissiveColor = new Color3(1, 0.96, 0.96);
   moteMat.diffuseColor = new Color3(0, 0, 0);
   moteMat.disableLighting = true;
   const moteMaster = MeshBuilder.CreateSphere('mote', { diameter: 0.06, segments: 6 }, scene);

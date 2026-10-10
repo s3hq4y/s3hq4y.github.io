@@ -209,16 +209,16 @@ export function mountLogoGrid(host: HTMLElement, opts: LogoGridOptions): LogoGri
 }
 
 // Painter for a text wordmark (e.g. s9y), tinted with the site gradient.
-export function textPainter(text: string, fontStack: string, ratio = 1.9): Painter {
+export function textPainter(text: string, fontStack: string, ratio = 1.9, weight = '400'): Painter {
   return (ctx, w, h) => {
     const fs = Math.min(h * 0.82, w / ratio);
-    ctx.font = '400 ' + fs + 'px ' + fontStack;
+    ctx.font = weight + ' ' + fs + 'px ' + fontStack;
     ctx.textAlign = 'center';
     ctx.textBaseline = 'middle';
-    const g = ctx.createLinearGradient(0, 0, w, h);
-    g.addColorStop(0, '#f4f4f7');
-    g.addColorStop(0.5, '#ff2d6f');
-    g.addColorStop(1, '#4d7cff');
+        const g = ctx.createLinearGradient(0, 0, w, h);
+    g.addColorStop(0, '#ffffff');
+    g.addColorStop(0.5, '#e4002b');
+    g.addColorStop(1, '#8a0019');
     ctx.fillStyle = g;
     ctx.fillText(text, w / 2, h / 2 + fs * 0.02);
   };

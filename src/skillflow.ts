@@ -33,12 +33,21 @@ interface Tile {
   ty: number;
 }
 
-const FONT = '"Fixedsys Core", "Zpix", monospace';
+const FONT = '"IBM Plex Mono", ui-monospace, monospace';
 const GAP = 0;
 const PADX = 9;
 const ICON = 12;
 const ICON_GAP = 6;
 const FONT_PX = 13;
+const FONT_WEIGHT = 500;
+
+// The icon badge is painted in the brand color; the glyph on top is outlined
+// in a contrasting color so it never disappears into its own background.
+const FALLBACK_ICON_COLOR = '#8a8a92';
+const ICON_OUTLINE_PX = 1;
+const OFFSETS: ReadonlyArray<readonly [number, number]> = [
+  [-1, -1], [0, -1], [1, -1], [-1, 0], [1, 0], [-1, 1], [0, 1], [1, 1],
+];
 
 // Icons are pulled from the Simple Icons CDN. Anything that fails to resolve
 // simply falls back to the colored square badge, so the layout never breaks.
@@ -61,40 +70,89 @@ const ICON_SLUG: Record<string, string> = {
   'Git': 'git', 'NX': 'nx', 'Jest': 'jest',
 };
 
-const iconCache = new Map<string, HTMLImageElement>();
+// A resolved icon asset: its brand color, the brand-colored glyph, and a
+// solid silhouette in the contrasting color used to draw the outline.
+interface IconAsset {
+  color: string;
+  glyph: HTMLImageElement;
+  outline: HTMLImageElement;
+}
 
+const iconCache = new Map<string, IconAsset | null>();
+const iconPending = new Set<string>();
+
+function normalizeHex(hex: string): string {
+  let h = hex.replace('#', '');
+  if (h.length === 3) h = h[0] + h[0] + h[1] + h[1] + h[2] + h[2];
+  if (h.length === 8) h = h.slice(0, 6);
+  return '#' + h.toLowerCase();
+}
+
+// WCAG relative luminance of a #rrggbb color, 0..1.
+function luminance(hex: string): number {
+  const h = normalizeHex(hex).slice(1);
+  const toLin = (v: number): number => (v <= 0.03928 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4));
+  const r = toLin(parseInt(h.slice(0, 2), 16) / 255);
+  const g = toLin(parseInt(h.slice(2, 4), 16) / 255);
+  const b = toLin(parseInt(h.slice(4, 6), 16) / 255);
+  return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+}
+
+function isLight(hex: string): boolean {
+  return luminance(hex) > 0.5;
+}
+
+function svgImage(svg: string): Promise<HTMLImageElement> {
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = () => resolve(img);
+    img.onerror = () => reject(new Error('svg decode failed'));
+    img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+  });
+}
+
+// Fetch the brand SVG, read its fill color, then pre-render the glyph in its
+// brand color plus a contrast-colored silhouette for the outline pass.
 function loadIcon(label: string, onReady: () => void): void {
-  if (iconCache.has(label)) return;
+  if (iconCache.has(label) || iconPending.has(label)) return;
   const slug = ICON_SLUG[label];
   if (!slug) {
-    iconCache.set(label, null as unknown as HTMLImageElement);
+    iconCache.set(label, null);
     return;
   }
-  const img = new Image();
-  img.crossOrigin = 'anonymous';
-  img.onload = () => { iconCache.set(label, img); onReady(); };
-  img.onerror = () => { iconCache.set(label, null as unknown as HTMLImageElement); };
-  img.src = ICON_BASE + slug;
+  iconPending.add(label);
+  fetch(ICON_BASE + slug)
+    .then((res) => (res.ok ? res.text() : Promise.reject(new Error(String(res.status)))))
+    .then(async (svg) => {
+      const match = svg.match(/fill="(#[0-9a-fA-F]{3,8})"/);
+      const raw = match ? match[1] : FALLBACK_ICON_COLOR;
+      const color = normalizeHex(raw);
+      const contrast = isLight(color) ? '#0a0a0b' : '#ffffff';
+      const outlineSvg = svg.split(raw).join(contrast);
+      const [glyph, outline] = await Promise.all([svgImage(svg), svgImage(outlineSvg)]);
+      iconCache.set(label, { color, glyph, outline });
+      onReady();
+    })
+    .catch(() => {
+      iconCache.set(label, null);
+      onReady();
+    })
+    .finally(() => {
+      iconPending.delete(label);
+    });
 }
 
 // A distinct accent color per skill chip: hashing the label keeps a given
 // skill the same color wherever it appears in the flow.
 const PALETTE = [
-  '#ff2d6f', '#4d7cff', '#a855f7', '#06b6d4', '#f59e0b', '#10b981',
-  '#ef4444', '#8b5cf6', '#ec4899', '#14b8a6', '#f97316', '#6366f1',
+  '#e4002b', '#ffffff', '#9a9aa2', '#ff4d63', '#c9c9d0', '#6d6d74',
+  '#e4002b', '#ffffff', '#ff4d63', '#b4b4ba', '#e4002b', '#8a0019',
 ];
 
 function hashStr(s: string): number {
   let h = 0;
   for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
   return Math.abs(h);
-}
-
-function withAlpha(hex: string, a: number): string {
-  const r = parseInt(hex.slice(1, 3), 16);
-  const g = parseInt(hex.slice(3, 5), 16);
-  const b = parseInt(hex.slice(5, 7), 16);
-  return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
 }
 
 // Chip height is derived from the row height at build time so adjacent rows
@@ -145,7 +203,7 @@ export function mountSkillFlow(host: HTMLElement, opts: SkillFlowOptions): Skill
 
   const measure = (): void => {
     if (!sctx) return;
-    sctx.font = FONT_PX + 'px ' + FONT;
+    sctx.font = FONT_WEIGHT + ' ' + FONT_PX + 'px ' + FONT;
     widths.length = 0;
     cycleW = 0;
     const invalidate = (): void => { if (!dead) drawSource(); };
@@ -160,21 +218,30 @@ export function mountSkillFlow(host: HTMLElement, opts: SkillFlowOptions): Skill
 
   const drawChip = (x: number, y: number, w: number, label: string): void => {
     if (!sctx) return;
-    const color = PALETTE[hashStr(label) % PALETTE.length];
-    sctx.fillStyle = withAlpha(color, 0.13);
-    sctx.strokeStyle = withAlpha(color, 0.6);
-    sctx.lineWidth = 1;
+    const asset = iconCache.get(label);
+    // Badge background comes from the icon's own brand color; without an icon,
+    // fall back to a stable hash color so the chip still reads as a solid tile.
+    const bg = asset ? asset.color : PALETTE[hashStr(label) % PALETTE.length];
+    const contrast = isLight(bg) ? '#0a0a0b' : '#ffffff';
+    sctx.fillStyle = bg;
     sctx.fillRect(x, y - chipH / 2, w, chipH);
-    sctx.strokeRect(x + 0.5, y - chipH / 2 + 0.5, w - 1, chipH - 1);
-    // Icon slot: brand glyph when available, colored square otherwise.
-    const icon = iconCache.get(label);
-    if (icon && icon.complete && icon.naturalWidth) {
-      sctx.drawImage(icon, x + PADX, y - ICON / 2, ICON, ICON);
+
+    const ix = x + PADX;
+    const iy = y - ICON / 2;
+    if (asset) {
+      // Outline: stamp the contrast-colored silhouette around the glyph so the
+      // mark separates from a background of a similar tone.
+      const o = ICON_OUTLINE_PX;
+      for (let k = 0; k < OFFSETS.length; k++) {
+        sctx.drawImage(asset.outline, ix + OFFSETS[k][0] * o, iy + OFFSETS[k][1] * o, ICON, ICON);
+      }
+      sctx.drawImage(asset.glyph, ix, iy, ICON, ICON);
     } else {
-      sctx.fillStyle = withAlpha(color, 0.95);
-      sctx.fillRect(x + PADX, y - ICON / 2, ICON, ICON);
+      sctx.fillStyle = contrast;
+      sctx.fillRect(ix, iy, ICON, ICON);
     }
-    sctx.fillStyle = 'rgba(244,244,247,0.86)';
+
+    sctx.fillStyle = contrast;
     sctx.fillText(label, x + PADX + ICON + ICON_GAP, y);
   };
 
@@ -182,7 +249,7 @@ export function mountSkillFlow(host: HTMLElement, opts: SkillFlowOptions): Skill
     if (!sctx) return;
     sctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     sctx.clearRect(0, 0, cssW, cssH);
-    sctx.font = FONT_PX + 'px ' + FONT;
+    sctx.font = FONT_WEIGHT + ' ' + FONT_PX + 'px ' + FONT;
     sctx.textBaseline = 'middle';
     for (let r = 0; r < rows; r++) {
       const y = (r + 0.5) * rowH;
